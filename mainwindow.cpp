@@ -40,6 +40,7 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
     if(!file.open(QFile::ReadOnly | QFile::Text)){ //Проверка на то, можем ли мы что-либо считывать
         QMessageBox::warning(this, "Title", "Не удалось открыть файл");
     }
+
     QString first_name = "Роман";
     QString second_name = "Бычков";
     QString otchestvo = "Евгеньевич";
@@ -48,6 +49,13 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
     QString time_as_string = time.toString("hh : mm : ss");
     QDate date = QDate::currentDate();
     QString date_as_string = date.toString("dd.MM.yyyy");
+    QList string = {"counter_row", "first_name", "second_name", "otchestvo", "time_as_string", "date_as_string", "filename"\
+                    "file_path"};
+    for(int column = 0; column != ui->tableWidget->columnCount(); column++){
+        QTableWidgetItem *item = new QTableWidgetItem(string[column]);
+
+    }
+
     ui->tableWidget->setItem(counter_row, 0, (new QTableWidgetItem(counter_row))->setTextAlignment(Qt::AlignCenter));
     ui->tableWidget->setItem(counter_row, 1, (new QTableWidgetItem(second_name))->setTextAlignment(Qt::AlignCenter));
     ui->tableWidget->setItem(counter_row, 2, new QTableWidgetItem(first_name).setTextAlignment(Qt::AlignCenter));
