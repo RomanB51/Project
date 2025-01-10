@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ResultWindow</class>
- <widget class="QDialog" name="ResultWindow">
+ <class>ReportWindow</class>
+ <widget class="QDialog" name="ReportWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
