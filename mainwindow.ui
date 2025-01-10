@@ -21,7 +21,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="pushButton_ChooseFile">
            <property name="text">
             <string>Выбрать файл</string>
            </property>
@@ -35,28 +35,28 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="pushButton_DeleteStr">
            <property name="text">
             <string>Удалить строку</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_4">
+          <widget class="QPushButton" name="pushButton_SendDB">
            <property name="text">
             <string>Отправить результаты в БД</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_5">
+          <widget class="QPushButton" name="pushButton_CheckDB">
            <property name="text">
             <string>Считать результаты с БД</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_7">
+          <widget class="QPushButton" name="pushButton_Close">
            <property name="text">
             <string>Закрыть</string>
            </property>
@@ -65,7 +65,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_6">
+        <widget class="QPushButton" name="pushButton_ChangeUser">
          <property name="text">
           <string>Сменить пользователя</string>
          </property>
