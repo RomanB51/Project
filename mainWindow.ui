@@ -6,12 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>720</width>
-    <height>415</height>
+    <width>1030</width>
+    <height>672</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Система обработки текста</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>

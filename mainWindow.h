@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QDialog>
+#include <QStatusBar>
 
 namespace Ui {
 class MainWindow;
@@ -21,6 +22,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QStatusBar *statusbar;
 };
 
 #endif // MAINWINDOW_H

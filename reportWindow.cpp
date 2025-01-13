@@ -1,5 +1,5 @@
-#include "reportWindow.h"
-#include "ui_reportWindow.h"
+#include "./reportWindow.h"
+#include "./ui_reportWindow.h"
 
 ReportWindow::ReportWindow(QWidget *parent)
     : QDialog(parent)

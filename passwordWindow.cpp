@@ -1,5 +1,5 @@
-﻿#include "passwordWindow.h"
-#include "ui_passwordWindow.h"
+﻿#include "./passwordWindow.h"
+#include "./ui_passwordWindow.h"
 #include <QMessageBox>
 
 PasswordWindow::PasswordWindow(QWidget *parent)
