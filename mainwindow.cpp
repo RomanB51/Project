@@ -5,30 +5,46 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QStatusBar>
+#include <map>
+#include <vector>
 
 MainWindow::MainWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::MainWindow)
 {
+    QStatusBar *status;
+    status->show();
+    status->showMessage("Ромаааааааааааа");
     ui->setupUi(this);
-    ui->tableWidget->setColumnCount(8);
+    ui->tableWidget->setColumnCount(7);
     ui->tableWidget->setRowCount(5);
-    QList<QString> name_column_list_report = {"№", "Фамилия", "Имя", "Отчество", "Дата", "Время", "Имя файла", "Путь к файлу"};
+    QList<QString> name_column_list_report = {"Имя файла", "Путь к файлу", "Дата", "Время", "Фамилия", "Имя", "Отчество"};
     QList<QString> name_column_list_result = {"а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", \
     "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я"};
     ui->tableWidget->setHorizontalHeaderLabels(name_column_list_report);
     ui->tableWidget->setColumnWidth(0, 10);
+
     //for(int i = 6; i != ui->tableWidget->columnCount(); ++i)
         //ui->tableWidget->setColumnWidth(i, 15);
-    ui->tableWidget->verticalHeader()->setVisible(0);
+    //ui->tableWidget->verticalHeader()->setVisible(0);
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-int counter_row = 0;
+struct Stroka{
+    QString file_path;
+    QString date_as_string;
+    QString time_as_string;
+    QString second_name;
+    QString first_name;
+    QString otchestvo;
+}
+    std::map <QString, Stroka> stroka;
+    int counter_row = 0;
 
 void MainWindow::on_pushButton_ChooseFile_clicked()
 {
@@ -36,34 +52,32 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
     QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/", filter);
     QFileInfo fileinfo(file_path);
     QString file_name = fileinfo.baseName();
+
+    Stroka *struct_str;
+    struct_str->file_path = file_path;
+
     QFile file(file_path);
     if(!file.open(QFile::ReadOnly | QFile::Text)){ //Проверка на то, можем ли мы что-либо считывать
         QMessageBox::warning(this, "Title", "Не удалось открыть файл");
     }
 
+    counter_row++;
+    struct_str->date_as_string =
     QString first_name = "Роман";
     QString second_name = "Бычков";
     QString otchestvo = "Евгеньевич";
-    counter_row++;
     QTime time = QTime::currentTime();
     QString time_as_string = time.toString("hh : mm : ss");
     QDate date = QDate::currentDate();
     QString date_as_string = date.toString("dd.MM.yyyy");
-    QList string = {"counter_row", "first_name", "second_name", "otchestvo", "time_as_string", "date_as_string", "filename"\
-                    "file_path"};
-    for(int column = 0; column != ui->tableWidget->columnCount(); column++){
-        QTableWidgetItem *item = new QTableWidgetItem(string[column]);
 
-    }
+    //stroka[file_name] = {file_path, date_as_string, time_as_string, second_name, first_name, otchestvo};
 
-    ui->tableWidget->setItem(counter_row, 0, (new QTableWidgetItem(counter_row))->setTextAlignment(Qt::AlignCenter));
-    ui->tableWidget->setItem(counter_row, 1, (new QTableWidgetItem(second_name))->setTextAlignment(Qt::AlignCenter));
-    ui->tableWidget->setItem(counter_row, 2, new QTableWidgetItem(first_name).setTextAlignment(Qt::AlignCenter));
-    ui->tableWidget->setItem(counter_row, 3, new QTableWidgetItem(otchestvo).setTextAlignment(Qt::AlignCenter));
-    ui->tableWidget->setItem(counter_row, 4, new QTableWidgetItem(date_as_string).setTextAlignment(Qt::AlignCenter));
-    ui->tableWidget->setItem(counter_row, 5, new QTableWidgetItem(time_as_string).setTextAlignment(Qt::AlignCenter));
-    ui->tableWidget->setItem(counter_row, 6, new QTableWidgetItem(filename).setTextAlignment(Qt::AlignCenter));
-    ui->tableWidget->setItem(counter_row, 7, new QTableWidgetItem(file_path).setTextAlignment(Qt::AlignCenter));
+    // for(int column = 0; column != ui->tableWidget->columnCount(); column++){
+    //     QTableWidgetItem *item = new QTableWidgetItem(stroka[file_name][column]);
+    //     item->setTextAlignment(Qt::AlignCenter);
+    //     ui->tableWidget->setItem(counter_row, column, item);
+    // }
 
 
     // QTextStream in(&file);
