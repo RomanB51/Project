@@ -84,6 +84,14 @@ void MainWindow::on_pushButton_Close_clicked()
 
 void MainWindow::on_pushButton_Delete_str_clicked()
 {
-    ui->tableWidget->removeRow(ui->tableWidget->currentRow());
+    int index_del_row = ui->tableWidget->currentRow();
+    QTableWidgetItem *column_file_name = ui->tableWidget->item(index_del_row, 0);
+    QTableWidgetItem *column_time = ui->tableWidget->item(index_del_row, 3);
+    QString file_name_del_row = column_file_name->text();
+    QString time_del_row = column_time->text();
+
+    QMessageBox::warning(this, "Строка", file_name_del_row);
+    stroka.erase(file_name_del_row);
+    ui->tableWidget->removeRow(index_del_row);
 }
 
