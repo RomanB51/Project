@@ -1,7 +1,7 @@
 #ifndef PASSWORDWINDOW_H
 #define PASSWORDWINDOW_H
 
-#include <QMainWindow>
+#include <QDialog>
 #include "mainWindow.h"
 
 QT_BEGIN_NAMESPACE
@@ -10,7 +10,7 @@ class PasswordWindow;
 }
 QT_END_NAMESPACE
 
-class PasswordWindow : public QMainWindow
+class PasswordWindow : public QDialog
 {
     Q_OBJECT
 

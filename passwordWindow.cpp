@@ -3,7 +3,7 @@
 #include <QMessageBox>
 
 PasswordWindow::PasswordWindow(QWidget *parent)
-    : QMainWindow(parent)
+    : QDialog(parent)
     , ui(new Ui::PasswordWindow)
 {
     ui->setupUi(this);
