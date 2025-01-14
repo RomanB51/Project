@@ -4,6 +4,8 @@
 
 #include <QMainWindow>
 #include <QStatusBar>
+#include <QEvent>
+#include <qtablewidget.h>
 
 namespace Ui {
 class MainWindow;
@@ -25,6 +27,8 @@ private slots:
     void on_pushButton_Close_clicked();
 
     void on_pushButton_Delete_str_clicked();
+
+    eventFilter();
 
 private:
     Ui::MainWindow *ui;

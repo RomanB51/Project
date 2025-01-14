@@ -7,7 +7,7 @@
 #include <QMessageBox>
 #include <QGuiApplication>
 #include <map>
-#include <string>
+#include <QKeyEvent>
 #include <vector>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableWidget->setHorizontalHeaderLabels(name_column_list_report);
     ui->statusbar->showMessage("Бычков Роман Евгеньевич");
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidget->installEventFilter(this);
 
 
 
@@ -38,7 +39,8 @@ int counter_row = 0;
 
 void MainWindow::on_pushButton_ChooseFile_clicked()
 {
-    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/", "Text File (*.txt)");
+    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/", "Text File (*.txt)");
+    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
 
     QFile file(file_path);
     if(!file.open(QFile::ReadOnly | QFile::Text)){
@@ -54,17 +56,12 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
         QString otchestvo = "Евгеньевич";
         QString time = QTime::currentTime().toString("hh : mm : ss");
         QString date = QDate::currentDate().toString("dd.MM.yyyy");
-        stroka[file_name] = {file_path, time, date, second_name, first_name, otchestvo};
+        stroka[file_name + time] = {file_name, file_path, date, time, second_name, first_name, otchestvo};
 
 
-        QTableWidgetItem *column_file_name = new QTableWidgetItem(file_name);
-        column_file_name->setTextAlignment(Qt::AlignCenter);
-        column_file_name->setToolTip(file_name);
-        ui->tableWidget->setItem(counter_row, 0, column_file_name);
-
-        for(int i = 1; i != ui->tableWidget->columnCount(); i++){
-            QTableWidgetItem *column = new QTableWidgetItem(stroka[file_name][i-1]);
-            column->setToolTip(stroka[file_name][i-1]);
+        for(int i = 0; i != ui->tableWidget->columnCount(); i++){
+            QTableWidgetItem *column = new QTableWidgetItem(stroka[file_name + time][i]);
+            column->setToolTip(stroka[file_name + time][i]);
             column->setTextAlignment(Qt::AlignCenter);
             ui->tableWidget->setItem(counter_row, i, column);
         }
@@ -81,7 +78,6 @@ void MainWindow::on_pushButton_Close_clicked()
 
 
 
-
 void MainWindow::on_pushButton_Delete_str_clicked()
 {
     int index_del_row = ui->tableWidget->currentRow();
@@ -90,8 +86,20 @@ void MainWindow::on_pushButton_Delete_str_clicked()
     QString file_name_del_row = column_file_name->text();
     QString time_del_row = column_time->text();
 
-    QMessageBox::warning(this, "Строка", file_name_del_row);
-    stroka.erase(file_name_del_row);
+    stroka.erase(file_name_del_row + time_del_row);
     ui->tableWidget->removeRow(index_del_row);
+}
+
+
+
+
+void MainWindow::eventFilter ( *obj, QEvent *evt )
+{
+    if(evt->type() == QEvent::KeyRelease){
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evt);
+        if(keyEvent->key() == Qt::Key_Enter){
+            QMessageBox::warning(this, "Ошибка", "Ты нажал энтер");
+        }
+    }
 }
 
