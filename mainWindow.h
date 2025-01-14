@@ -21,6 +21,11 @@ private slots:
 
     void on_pushButton_ChooseFile_clicked();
 
+
+    void on_pushButton_Close_clicked();
+
+    void on_pushButton_Delete_str_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
