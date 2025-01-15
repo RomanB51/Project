@@ -107,10 +107,13 @@ void MainWindow::on_pushButton_Delete_str_clicked()
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *evt){
     if(evt->type() == QEvent::KeyRelease){
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evt);
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(evt);
+        QTableWidgetItem *new_item = ui->tableWidget->currentItem();
+        QString text_of_old_item = new_item->text();
+        QMessageBox::warning(this, "Ошибка", text_of_old_item);
         if(ui->tableWidget->hasFocus() && keyEvent->key() == Qt::Key_Return){
-            QTableWidgetItem *new_item = ui->tableWidget->currentItem();
             QString text_of_new_item = new_item->text();
+            QMessageBox::warning(this, "Ошибка", text_of_new_item);
             new_item->setToolTip(text_of_new_item);
         }
     }
