@@ -28,7 +28,9 @@ private slots:
 
     void on_pushButton_Delete_str_clicked();
 
-    bool eventFilter(QObject *obj, QEvent *evt );
+    bool eventFilter(QObject *obj, QEvent *evt);
+
+    void on_tableWidget_cellDoubleClicked(int row, int column);
 
 private:
     Ui::MainWindow *ui;

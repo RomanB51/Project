@@ -23,6 +23,8 @@ private slots:
 
     void on_pushButton_Escape_clicked();
 
+    bool eventFilter(QObject *obj, QEvent *evt);
+
 private:
     Ui::PasswordWindow *ui;
     MainWindow *mainWindow;

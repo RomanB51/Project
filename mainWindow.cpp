@@ -38,8 +38,8 @@ int counter_row = 0;
 
 void MainWindow::on_pushButton_ChooseFile_clicked()
 {
-    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/", "Text File (*.txt)");
-    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
+    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/", "Text File (*.txt)");
+    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
 
     QFile file(file_path);
     if(!file.open(QFile::ReadOnly | QFile::Text)){
@@ -90,33 +90,44 @@ void MainWindow::on_pushButton_Delete_str_clicked()
 }
 
 
-
-
-// bool MainWindow::event(QEvent *event)
-// {
-
-//     if(event->type() == QEvent::KeyPress){
-//         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-//         if(keyEvent->key() == Qt::Key_Enter){
-//             QMessageBox::warning(this, "Ошибка", "Ты нажал энтер");
-//         }
-//     }
-
-//     return QWidget::event(event);
-// }
-
+QString text_of_old_item;
+QString key_of_map;
+int number_of_change_column;
 bool MainWindow::eventFilter(QObject *obj, QEvent *evt){
-    if(evt->type() == QEvent::KeyRelease){
-        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(evt);
-        QTableWidgetItem *new_item = ui->tableWidget->currentItem();
-        QString text_of_old_item = new_item->text();
-        QMessageBox::warning(this, "Ошибка", text_of_old_item);
+    if(evt->type() == QKeyEvent::KeyRelease){
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evt);
         if(ui->tableWidget->hasFocus() && keyEvent->key() == Qt::Key_Return){
+            QTableWidgetItem *new_item = ui->tableWidget->currentItem();
             QString text_of_new_item = new_item->text();
-            QMessageBox::warning(this, "Ошибка", text_of_new_item);
-            new_item->setToolTip(text_of_new_item);
+            if(text_of_new_item != text_of_old_item){
+                QMessageBox::warning(this, "Ошибка", "Они не равны");
+                new_item->setToolTip(text_of_new_item);
+                QTableWidgetItem *column_time = ui->tableWidget->item(ui->tableWidget->currentRow(), 3);
+                QString time_change_row = column_time->text();
+                stroka[key_of_map][number_of_change_column] = text_of_new_item;
+                auto new_key_node = stroka.extract(key_of_map);
+                new_key_node.key() = text_of_new_item + time_change_row;
+                stroka.insert(std::move(new_key_node));
+            }
+            else{
+                QMessageBox::warning(this, "Ошибка", "Они равны");
+            }
         }
     }
     return QMainWindow::eventFilter(obj, evt);
 }
+
+
+void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
+{
+    QTableWidgetItem *column_file_name = ui->tableWidget->item(ui->tableWidget->currentRow(), 0);
+    QTableWidgetItem *column_time = ui->tableWidget->item(ui->tableWidget->currentRow(), 3);
+    QString file_name_change_row = column_file_name->text();
+    QString time_change_row = column_time->text();
+    number_of_change_column = ui->tableWidget->currentColumn();
+    key_of_map = file_name_change_row + time_change_row;
+    QTableWidgetItem *new_item = ui->tableWidget->currentItem();
+    text_of_old_item = new_item->text();
+}
+
 
