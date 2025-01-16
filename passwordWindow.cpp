@@ -11,7 +11,9 @@ PasswordWindow::PasswordWindow(QWidget *parent)
     ui->setupUi(this);
     ui->lineEdit_login->installEventFilter(this);
     ui->lineEdit_password->installEventFilter(this);
-    ui->lineEdit_password->home(0);
+    ui->pushButton_Entry->installEventFilter(this);
+    ui->pushButton_Entry->setAutoDefault(0);
+    ui->pushButton_Escape->setAutoDefault(0);
 }
 
 PasswordWindow::~PasswordWindow()
@@ -19,19 +21,26 @@ PasswordWindow::~PasswordWindow()
     delete ui;
 }
 
+
+bool flag_for_focus_enter_after_QMessage = 1;
+
 bool PasswordWindow::eventFilter(QObject *obj, QEvent *evt){
-    if(evt->type() == QKeyEvent::KeyRelease){
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evt);
-        if(ui->lineEdit_login->hasFocus() && keyEvent->key() == Qt::Key_Return){
-            ui->lineEdit_password->setFocus();
-            ui->lineEdit_password->setCursorPosition(0);
+        if(evt->type() == QKeyEvent::KeyRelease){
+            if(flag_for_focus_enter_after_QMessage){
+                QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evt);
+                if(keyEvent->key() == Qt::Key_Return && !ui->pushButton_Entry->hasFocus()){
+                    QKeyEvent ke(QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier);
+                    QCoreApplication::sendEvent(this, &ke);
+                }
+                if(ui->pushButton_Entry->hasFocus())
+                    on_pushButton_Entry_clicked();
+            }
+            else
+                flag_for_focus_enter_after_QMessage = 1;
         }
-        if(ui->lineEdit_password->hasFocus() && keyEvent->key() == Qt::Key_Return){
-            ui->pushButton_Entry->setFocus();
-        }
-    }
     return QDialog::eventFilter(obj, evt);
 }
+
 
 void PasswordWindow::on_pushButton_Entry_clicked()
 {
@@ -45,6 +54,9 @@ void PasswordWindow::on_pushButton_Entry_clicked()
     }
     else{
         QMessageBox::information(this, "Ошибка авторизации", "Логин или пароль введены неверно");
+        flag_for_focus_enter_after_QMessage = 0;
+        ui->lineEdit_login->setFocus();
+        ui->lineEdit_login->selectAll();
     }
 }
 
