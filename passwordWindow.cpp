@@ -3,6 +3,8 @@
 #include <QMessageBox>
 #include <QKeyEvent>
 #include <QEvent>
+#include <QAction>
+#include <QLineEdit>
 
 PasswordWindow::PasswordWindow(QWidget *parent)
     : QDialog(parent)
@@ -14,6 +16,9 @@ PasswordWindow::PasswordWindow(QWidget *parent)
     ui->pushButton_Entry->installEventFilter(this);
     ui->pushButton_Entry->setAutoDefault(0);
     ui->pushButton_Escape->setAutoDefault(0);
+    QAction *customAction = new QAction("Custom Action", ui->lineEdit_password);
+    customAction->setIcon(QIcon("D:/C++/My_project/Project/Show.png"));
+    ui->lineEdit_password->addAction(customAction, QLineEdit::TrailingPosition);
 }
 
 PasswordWindow::~PasswordWindow()
