@@ -8,7 +8,7 @@
 #include <qtablewidget.h>
 
 namespace Ui {
-class reportWindow;
+class MainWindow;
 }
 
 class MainWindow : public QMainWindow
@@ -42,7 +42,7 @@ private slots:
     void on_pushButton_Change_user_clicked();
 
 private:
-    Ui::reportWindow *ui;
+    Ui::MainWindow *ui;
 
     QString first_name;
     QString second_name;
