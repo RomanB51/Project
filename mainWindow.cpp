@@ -11,19 +11,26 @@
 #include <QKeyEvent>
 #include <vector>
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget *parent, QString second_name, QString first_name, QString otchestvo)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    this->first_name = first_name;
+    this->second_name = second_name;
+    this->otchestvo = otchestvo;
+
+
     ui->tableWidget->setColumnCount(7);
     QList<QString> name_column_list_report = {"Имя файла", "Путь к файлу", "Дата", "Время", "Фамилия", "Имя", "Отчество"};
     QList<QString> name_column_list_result = {"а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", \
     "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я"};
     ui->tableWidget->setHorizontalHeaderLabels(name_column_list_report);
-    ui->statusbar->showMessage("Бычков Роман Евгеньевич");
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->installEventFilter(this);
+
+    ui->statusbar->showMessage(this->second_name + " " + this->first_name + " " + this->otchestvo);
 
 }
 
@@ -38,8 +45,8 @@ int counter_row = 0;
 
 void MainWindow::on_pushButton_ChooseFile_clicked()
 {
-    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/", "Text File (*.txt)");
-    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
+    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/My_project/", "Text File (*.txt)");
+    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
 
     QFile file(file_path);
     if(!file.open(QFile::ReadOnly | QFile::Text)){
@@ -50,9 +57,9 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
         ui->tableWidget->insertRow(counter_row);
         QFileInfo file_info(file_path);
         QString file_name = file_info.baseName();
-        QString first_name = "Роман";
-        QString second_name = "Бычков";
-        QString otchestvo = "Евгеньевич";
+        QString first_name = this->getFirst_name();
+        QString second_name = this->getSecond_name();
+        QString otchestvo = this->getOtchestvo();
         QString time = QTime::currentTime().toString("hh : mm : ss");
         QString date = QDate::currentDate().toString("dd.MM.yyyy");
         stroka[file_name + time] = {file_name, file_path, date, time, second_name, first_name, otchestvo};
@@ -72,7 +79,7 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
 
 void MainWindow::on_pushButton_Close_clicked()
 {
-    this->close();
+
 }
 
 
@@ -99,8 +106,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *evt){
         if(ui->tableWidget->hasFocus() && keyEvent->key() == Qt::Key_Return){
             QTableWidgetItem *new_item = ui->tableWidget->currentItem();
             QString text_of_new_item = new_item->text();
-            if(text_of_new_item != text_of_old_item){
-                QMessageBox::warning(this, "Ошибка", "Они не равны");
+            if(text_of_new_item != text_of_old_item && text_of_new_item != ""){
                 new_item->setToolTip(text_of_new_item);
                 QTableWidgetItem *column_time = ui->tableWidget->item(ui->tableWidget->currentRow(), 3);
                 QString time_change_row = column_time->text();
@@ -110,7 +116,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *evt){
                 stroka.insert(std::move(new_key_node));
             }
             else{
-                QMessageBox::warning(this, "Ошибка", "Они равны");
+                new_item->setText(text_of_old_item);
             }
         }
     }
@@ -130,4 +136,12 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
     text_of_old_item = new_item->text();
 }
 
+
+
+
+
+void MainWindow::on_pushButton_Change_user_clicked()
+{
+
+}
 

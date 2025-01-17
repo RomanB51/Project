@@ -73,15 +73,26 @@ void PasswordWindow::on_pushButton_Entry_clicked()
 
     if(login == "" && password == ""){
         this->hide();
-        mainWindow = new MainWindow();
+        QString first_name = "Роман";
+        QString second_name = "Бычков";
+        QString otchestvo = "Евгеньевич";
+        mainWindow = new MainWindow(this, second_name, first_name, otchestvo);
         mainWindow->show();
     }
-    else{
-        QMessageBox::information(this, "Ошибка авторизации", "Логин или пароль введены неверно");
-        flag_for_focus_enter_after_QMessage = 0;
-        ui->lineEdit_password->setFocus();
-        ui->lineEdit_password->clear();
-    }
+    else if(login == "1" && password == "1"){
+        this->hide();
+        QString first_name = "Василий";
+        QString second_name = "Вахрамеев";
+        QString otchestvo = "Евгеньевич";
+        mainWindow = new MainWindow(this, second_name, first_name, otchestvo);
+        mainWindow->show();
+        }
+        else{
+            QMessageBox::information(this, "Ошибка авторизации", "Логин или пароль введены неверно");
+            flag_for_focus_enter_after_QMessage = 0;
+            ui->lineEdit_password->setFocus();
+            ui->lineEdit_password->clear();
+        }
 }
 
 

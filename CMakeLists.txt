@@ -23,7 +23,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         mainWindow.h mainWindow.cpp mainWindow.ui
-        reportWindow.h reportWindow.cpp reportWindow.ui
+
         main.h main.cpp
         Resources.qrc
 
