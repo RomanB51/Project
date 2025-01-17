@@ -26,6 +26,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         main.h main.cpp
         Resources.qrc
+        reportWindow.h reportWindow.cpp reportWindow.ui
+
 
     )
 # Define target properties for Android with Qt 6 as:

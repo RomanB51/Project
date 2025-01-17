@@ -79,7 +79,7 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
 
 void MainWindow::on_pushButton_Close_clicked()
 {
-
+    this->close();
 }
 
 
