@@ -16,9 +16,12 @@ PasswordWindow::PasswordWindow(QWidget *parent)
     ui->pushButton_Entry->installEventFilter(this);
     ui->pushButton_Entry->setAutoDefault(0);
     ui->pushButton_Escape->setAutoDefault(0);
-    QAction *customAction = new QAction("Custom Action", ui->lineEdit_password);
-    customAction->setIcon(QIcon("D:/C++/My_project/Project/Show.png"));
+    customAction = new QAction("Custom Action", ui->lineEdit_password);
+    customAction->setIcon(QIcon(":/Images/Icons/Show.png"));
+    customAction->setToolTip("Показать пароль");
     ui->lineEdit_password->addAction(customAction, QLineEdit::TrailingPosition);
+    ui->lineEdit_password->setEchoMode(QLineEdit::Password);
+    connect(customAction, &QAction::triggered, this, &PasswordWindow::Show_Hide_Password);
 }
 
 PasswordWindow::~PasswordWindow()
@@ -28,6 +31,22 @@ PasswordWindow::~PasswordWindow()
 
 
 bool flag_for_focus_enter_after_QMessage = 1;
+bool flag_for_show_hide = 0;
+
+void PasswordWindow::Show_Hide_Password(){
+    if(flag_for_show_hide){
+        customAction->setIcon(QIcon(":/Images/Icons/Show.png"));
+        customAction->setToolTip("Показать пароль");
+        ui->lineEdit_password->setEchoMode(QLineEdit::Password);
+        flag_for_show_hide = 0;
+    }
+    else{
+        customAction->setIcon(QIcon(":/Images/Icons/Hide.png"));
+        customAction->setToolTip("Скрыть пароль");
+        ui->lineEdit_password->setEchoMode(QLineEdit::Normal);
+        flag_for_show_hide = 1;
+    }
+}
 
 bool PasswordWindow::eventFilter(QObject *obj, QEvent *evt){
         if(evt->type() == QKeyEvent::KeyRelease){
@@ -41,7 +60,7 @@ bool PasswordWindow::eventFilter(QObject *obj, QEvent *evt){
                     on_pushButton_Entry_clicked();
             }
             else
-                flag_for_focus_enter_after_QMessage = 1;
+               flag_for_focus_enter_after_QMessage = 1;
         }
     return QDialog::eventFilter(obj, evt);
 }
@@ -60,8 +79,8 @@ void PasswordWindow::on_pushButton_Entry_clicked()
     else{
         QMessageBox::information(this, "Ошибка авторизации", "Логин или пароль введены неверно");
         flag_for_focus_enter_after_QMessage = 0;
-        ui->lineEdit_login->setFocus();
-        ui->lineEdit_login->selectAll();
+        ui->lineEdit_password->setFocus();
+        ui->lineEdit_password->clear();
     }
 }
 

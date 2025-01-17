@@ -2,6 +2,7 @@
 #define PASSWORDWINDOW_H
 
 #include <QDialog>
+#include <QAction>
 #include "mainWindow.h"
 
 QT_BEGIN_NAMESPACE
@@ -23,10 +24,13 @@ private slots:
 
     void on_pushButton_Escape_clicked();
 
+    void Show_Hide_Password();
+
     bool eventFilter(QObject *obj, QEvent *evt);
 
 private:
     Ui::PasswordWindow *ui;
     MainWindow *mainWindow;
+    QAction *customAction;
 };
 #endif // PASSWORDWINDOW_H

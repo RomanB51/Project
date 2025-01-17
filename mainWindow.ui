@@ -59,11 +59,22 @@
          </layout>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_6">
-          <property name="text">
-           <string>Сменить пользователя</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QPushButton" name="pushButton_Report">
+            <property name="text">
+             <string>Показать обработку</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_6">
+            <property name="text">
+             <string>Сменить пользователя</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
