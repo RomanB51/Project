@@ -9,6 +9,7 @@
 #include <map>
 #include <QEvent>
 #include <QKeyEvent>
+#include <QMouseEvent>
 #include <vector>
 
 MainWindow::MainWindow(QWidget *parent, QString second_name, QString first_name, QString otchestvo)
@@ -32,6 +33,10 @@ MainWindow::MainWindow(QWidget *parent, QString second_name, QString first_name,
 
     ui->statusbar->showMessage(this->second_name + " " + this->first_name + " " + this->otchestvo);
 
+    password_window = parent;
+
+
+
 }
 
 MainWindow::~MainWindow()
@@ -45,8 +50,8 @@ int counter_row = 0;
 
 void MainWindow::on_pushButton_ChooseFile_clicked()
 {
-    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/My_project/", "Text File (*.txt)");
-    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
+    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/My_project/", "Text File (*.txt)");
+    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
 
     QFile file(file_path);
     if(!file.open(QFile::ReadOnly | QFile::Text)){
@@ -94,6 +99,9 @@ void MainWindow::on_pushButton_Delete_str_clicked()
 
     stroka.erase(file_name_del_row + time_del_row);
     ui->tableWidget->removeRow(index_del_row);
+
+
+
 }
 
 
@@ -107,6 +115,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *evt){
             QTableWidgetItem *new_item = ui->tableWidget->currentItem();
             QString text_of_new_item = new_item->text();
             if(text_of_new_item != text_of_old_item && text_of_new_item != ""){
+                QMessageBox::warning(this, "Все ок", "Все ок");
                 new_item->setToolTip(text_of_new_item);
                 QTableWidgetItem *column_time = ui->tableWidget->item(ui->tableWidget->currentRow(), 3);
                 QString time_change_row = column_time->text();
@@ -117,11 +126,13 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *evt){
             }
             else{
                 new_item->setText(text_of_old_item);
+                QMessageBox::warning(this, "Ошибка", "Ввел либо старое значение, либо пустоту");
             }
         }
     }
     return QMainWindow::eventFilter(obj, evt);
 }
+
 
 
 void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
@@ -137,11 +148,17 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 }
 
 
-
-
-
 void MainWindow::on_pushButton_Change_user_clicked()
 {
+    password_window->show();
+    this->~MainWindow();
+}
 
+
+
+
+void MainWindow::on_tableWidget_itemChanged(QTableWidgetItem *item)
+{
+    QMessageBox::warning(this, "Ошибка", "Ты изменил");
 }
 

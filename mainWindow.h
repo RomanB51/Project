@@ -41,12 +41,15 @@ private slots:
 
     void on_pushButton_Change_user_clicked();
 
+    void on_tableWidget_itemChanged(QTableWidgetItem *item);
+
 private:
     Ui::MainWindow *ui;
 
     QString first_name;
     QString second_name;
     QString otchestvo;
+    QWidget *password_window;
 };
 
 #endif // MAINWINDOW_H

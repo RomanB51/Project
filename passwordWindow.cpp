@@ -56,8 +56,9 @@ bool PasswordWindow::eventFilter(QObject *obj, QEvent *evt){
                     QKeyEvent ke(QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier);
                     QCoreApplication::sendEvent(this, &ke);
                 }
-                if(ui->pushButton_Entry->hasFocus())
+                if(ui->pushButton_Entry->hasFocus()){
                     on_pushButton_Entry_clicked();
+                }
             }
             else
                flag_for_focus_enter_after_QMessage = 1;
@@ -70,6 +71,7 @@ void PasswordWindow::on_pushButton_Entry_clicked()
 {
     QString login = ui->lineEdit_login->text();
     QString password = ui->lineEdit_password->text();
+
 
     if(login == "" && password == ""){
         this->hide();
@@ -93,6 +95,9 @@ void PasswordWindow::on_pushButton_Entry_clicked()
             ui->lineEdit_password->setFocus();
             ui->lineEdit_password->clear();
         }
+        ui->lineEdit_login->clear();
+        ui->lineEdit_password->clear();
+        ui->lineEdit_login->setFocus();
 }
 
 
