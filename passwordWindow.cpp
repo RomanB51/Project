@@ -1,5 +1,5 @@
-﻿#include "./passwordWindow.h"
-#include "./ui_passwordWindow.h"
+﻿#include "passwordWindow.h"
+#include "ui_passwordWindow.h"
 #include <QMessageBox>
 #include <QKeyEvent>
 #include <QEvent>
@@ -32,6 +32,7 @@ PasswordWindow::~PasswordWindow()
 
 bool flag_for_focus_enter_after_QMessage = 1;
 bool flag_for_show_hide = 0;
+
 
 void PasswordWindow::Show_Hide_Password(){
     if(flag_for_show_hide){
