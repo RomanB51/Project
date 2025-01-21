@@ -46,32 +46,37 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-// std::map <QString, std::vector <QString>> stroka_of_MainWindow;
-// std::map <QString, std::vector <std::vector<int>>> stroka_of_ReportWindow;
-// int counter_row = 0;
+const QString MainWindow::rus_small_letters[33] = {"а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", \
+                                             "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я"};
 
+const QString MainWindow::eng_small_letters[26] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", \
+                                             "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
 
-// const QString rus_small_letters[33] = {"а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", \
-//                                  "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я"};
-// std::vector<int> count_rus_small_letters = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-// const QString rus_big_letters[33] = {"А", "Б", "В", "Г", "Д", "Е", "Ё", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", \
-//                                "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я"};
-// std::vector<int> count_rus_big_letters = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+const QString MainWindow::numbers[10] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
-// const QString eng_small_letters[26] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", \
-//                                  "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
-// std::vector<int> count_eng_small_letters = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+const QString MainWindow::signs[27] = {"!", "?", ".", ",", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "+", "=", "\n", "{", "}",
+                                 "[", "]", "/", "<", ">", ":", ";", "'"};
 
-// const QString eng_big_letters[26] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", \
-//                                "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-// std::vector<int> count_eng_big_letters = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+QString MainWindow::Read_rus_small_letters(int num_val)
+{
+    return rus_small_letters[num_val];
+}
 
-// const QString numbers[10] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
-// std::vector<int> count_numbers = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+QString MainWindow::Read_eng_small_letters(int num_val)
+{
+    return eng_small_letters[num_val];
+}
 
-// const QString signs[28] = {"!", "?", ".", ",", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "+", "=", "\n", "{", "}"\
-//                      "[", "]", "/", "<", ">", ":", ";", "'", "'"};
-// std::vector<int> count_signs = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+QString MainWindow::Read_numbers(int num_val)
+{
+    return numbers[num_val];
+}
+
+QString MainWindow::Read_signs(int num_val)
+{
+    return signs[num_val];
+}
+
 
 
 void MainWindow::on_pushButton_ChooseFile_clicked()
@@ -146,11 +151,9 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
             }
         }
 
-        stroka_of_ReportWindow[file_name + time] = {count_rus_small_letters, count_rus_big_letters, count_numbers,\
-                                                    count_eng_small_letters, count_eng_big_letters, count_signs};
-        for(size_t i = 0; i != count_rus_small_letters.size(); ++i){
-            qDebug() << rus_small_letters[i] << " = " << count_rus_small_letters[i] << "\t";
-        }
+        stroka_of_ReportWindow[file_name + time] = {count_rus_small_letters, count_rus_big_letters, count_eng_small_letters,\
+                                                    count_eng_big_letters, count_numbers, count_signs};
+
         file.close();
     }
 }
@@ -174,8 +177,6 @@ void MainWindow::on_pushButton_Delete_str_clicked()
 
     stroka_of_MainWindow.erase(file_name_del_row + time_del_row);
     ui->tableWidget->removeRow(index_del_row);
-
-
 
 }
 
