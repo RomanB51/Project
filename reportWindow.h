@@ -14,7 +14,7 @@ class ReportWindow : public QMainWindow
 
 public:
     explicit ReportWindow(QMainWindow *parent = nullptr, const QString& second_name = "", const QString& first_name = "",\
-                        const QString& otchestvo = "", std::vector<std::vector<int> > count_of_symbol = {});
+                        const QString& otchestvo = "", std::vector<std::vector<int> > count_of_symbol = {}, const int counter_of_troitochie = 0);
     ~ReportWindow();
 
 private slots:
@@ -23,6 +23,7 @@ private slots:
 private:
     Ui::ReportWindow *ui;
     QMainWindow *mainWindow;
+    int count_letters = 0, count_paragraph = 0, count_proposal = 0, count_words = 0, count_numbers = 0, count_glasn = 0, count_soglasn = 0;
 
 
 };

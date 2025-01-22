@@ -29,8 +29,6 @@ MainWindow::MainWindow(QWidget *parent, const QString &second_name, const QStrin
 
     ui->tableWidget->setColumnCount(7);
     QList<QString> name_column_list_report = {"Имя файла", "Путь к файлу", "Дата", "Время", "Фамилия", "Имя", "Отчество"};
-    QList<QString> name_column_list_result = {"а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", \
-    "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я"};
     ui->tableWidget->setHorizontalHeaderLabels(name_column_list_report);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->installEventFilter(this);
@@ -54,8 +52,8 @@ const QString MainWindow::eng_small_letters[26] = {"a", "b", "c", "d", "e", "f",
 
 const QString MainWindow::numbers[10] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
-const QString MainWindow::signs[27] = {"!", "?", ".", ",", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "+", "=", "\n", "{", "}",
-                                 "[", "]", "/", "<", ">", ":", ";", "'"};
+const QString MainWindow::signs[29] = {"!", "?", ".", ",", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "+", "=",
+                                        "{", "}", "[", "]", "|", "/", "<", ">", ":", ";", "'", "\n", " "};
 
 QString MainWindow::Read_rus_small_letters(int num_val)
 {
@@ -113,44 +111,71 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
         QString* ptr_symbol = &symbol;
 
         while(in.readLineInto(ptr_symbol, 1)){
-            for(size_t i = 0; i != count_rus_small_letters.size() ; ++i){
-                if(*ptr_symbol == rus_small_letters[i]){
-                    count_rus_small_letters[i]++;
-                    break;
-                }
-            }
-            for(size_t i = 0; i != count_rus_big_letters.size(); ++i){
-                if(*ptr_symbol == rus_big_letters[i]){
-                    count_rus_big_letters[i]++;
-                    break;
-                }
-            }
-            for(size_t i = 0; i != count_numbers.size(); ++i){
-                if(*ptr_symbol == numbers[i]){
-                    count_numbers[i]++;
-                    break;
-                }
-            }
-            for(size_t i = 0; i != count_eng_small_letters.size(); ++i){
-                if(*ptr_symbol == eng_small_letters[i]){
-                    count_eng_small_letters[i]++;
-                    break;
-                }
-            }
-            for(size_t i = 0; i != count_eng_big_letters.size(); ++i){
-                if(*ptr_symbol == eng_big_letters[i]){
-                    count_eng_big_letters[i]++;
-                    break;
-                }
-            }
-            for(size_t i = 0; i != count_signs.size(); ++i){
-                if(*ptr_symbol == signs[i]){
-                    count_signs[i]++;
-                    break;
+            bool interrupt = 1;
+            // if(interrupt){
+            //     for(size_t i = 0; i != count_rus_small_letters.size() ; ++i){
+            //         if(*ptr_symbol == rus_small_letters[i]){
+            //             count_rus_small_letters[i]++;
+            //             interrupt = 0;
+            //             break;
+            //         }
+            //     }
+            // }
+            // if(interrupt){
+            //     for(size_t i = 0; i != count_rus_big_letters.size(); ++i){
+            //         if(*ptr_symbol == rus_big_letters[i]){
+            //             count_rus_big_letters[i]++;
+            //             interrupt = 0;
+            //             break;
+            //         }
+            //     }
+            // }
+            // if(interrupt){
+            //     for(size_t i = 0; i != count_numbers.size(); ++i){
+            //         if(*ptr_symbol == numbers[i]){
+            //             count_numbers[i]++;
+            //             interrupt = 0;
+            //             break;
+            //         }
+            //     }
+            // }
+            // if(interrupt){
+            //     for(size_t i = 0; i != count_eng_small_letters.size(); ++i){
+            //         if(*ptr_symbol == eng_small_letters[i]){
+            //             count_eng_small_letters[i]++;
+            //             interrupt = 0;
+            //             break;
+            //         }
+            //     }
+            // }
+            // if(interrupt){
+            //     for(size_t i = 0; i != count_eng_big_letters.size(); ++i){
+            //         if(*ptr_symbol == eng_big_letters[i]){
+            //             count_eng_big_letters[i]++;
+            //             interrupt = 0;
+            //             break;
+            //         }
+            //     }
+            // }
+            if(interrupt){
+                for(size_t i = 0; i != count_signs.size(); ++i){
+                    if(*ptr_symbol == signs[i]){
+                        count_signs[i]++;
+                        interrupt = 0;
+                        if(i == 2){
+                            if(in.readLineInto(ptr_symbol, 2)){
+                                if(*ptr_symbol == ".."){
+                                    counter_of_troitochie++;
+                                    count_signs[2]--;
+                                }
+                            }
+                        }
+                        break;
+                    }
                 }
             }
         }
-
+        qDebug() << "Троеточие  " << counter_of_troitochie;
         stroka_of_ReportWindow[file_name + time] = {count_rus_small_letters, count_rus_big_letters, count_eng_small_letters,\
                                                     count_eng_big_letters, count_numbers, count_signs};
 
@@ -236,7 +261,8 @@ void MainWindow::on_pushButton_Report_clicked()
         QTableWidgetItem *column_time = ui->tableWidget->item(ui->tableWidget->currentRow(), 3);
         QString file_name_row = column_file_name->text();
         QString time_row = column_time->text();
-        reportWindow = new ReportWindow(this, this->second_name, this->first_name, this->otchestvo, stroka_of_ReportWindow[file_name_row + time_row]);
+        reportWindow = new ReportWindow(this, this->second_name, this->first_name, this->otchestvo,\
+                                        stroka_of_ReportWindow[file_name_row + time_row], counter_of_troitochie);
         this->hide();
         reportWindow->show();
     }

@@ -2,7 +2,7 @@
 #include "ui_reportWindow.h"
 
 ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, const QString &first_name, const QString &otchestvo, \
-                           std::vector<std::vector<int>> count_of_symbol)
+                           std::vector<std::vector<int>> count_of_symbol, const int counter_of_troitochie)
     : QMainWindow(parent)
     , ui(new Ui::ReportWindow)
 {
@@ -21,6 +21,23 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
     ui->tableWidget_english->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget_symbol->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget_number->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    count_paragraph = count_of_symbol[5][27];
+    count_words = count_of_symbol[5][28] + 1;
+    count_proposal = counter_of_troitochie + count_of_symbol[5][0] + count_of_symbol[5][1] + count_of_symbol[5][2];
+
+    for(int i = 0; i != 33; ++i){
+        if(i == 0 || i == 5 || i == 6 || i == 9 || i == 15 || i == 20 || i == 28 || i == 30 || i == 31 || i == 32)
+            count_glasn += count_of_symbol[0][i] + count_of_symbol[1][i];
+        else
+            count_soglasn += count_of_symbol[0][i] + count_of_symbol[1][i];
+    }
+    for(int i = 0; i != 26; ++i){
+        if(i == 0 || i == 4 || i == 8 || i == 14 || i == 20 || i == 24)
+            count_glasn += count_of_symbol[2][i] + count_of_symbol[3][i];
+        else
+            count_soglasn += count_of_symbol[2][i] + count_of_symbol[3][i];
+    }
 
     for(int i = 0; i != ui->tableWidget_russian->rowCount(); ++i){
         for(int j = 0; j != ui->tableWidget_russian->columnCount(); ++j){
@@ -56,6 +73,7 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
     for(int i = 0; i != ui->tableWidget_number->columnCount(); ++i){
         QTableWidgetItem *item = new QTableWidgetItem("'" + MainWindow::Read_numbers(i) + "'" + " = " +\
                                                       QString::number(count_of_symbol[4][i]));
+        count_numbers += count_of_symbol[4][i];
         item->setToolTip(item->text());
         item->setTextAlignment(Qt::AlignCenter);
         item->setFlags(item->flags() &= ~Qt::ItemIsEditable);
@@ -73,6 +91,13 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
         }
     }
 
+    ui->lineEdit_letters->setText(QString::number(count_glasn + count_soglasn));
+    ui->lineEdit_paragraph->setText(QString::number(count_paragraph));
+    ui->lineEdit_proposal->setText(QString::number(count_proposal));
+    ui->lineEdit_word->setText(QString::number(count_words));
+    ui->lineEdit_number->setText(QString::number(count_numbers));
+    ui->lineEdit_glasn_soglasn->setText(QString::number(count_glasn) + "/" + QString::number(count_soglasn));
+
 }
 
 ReportWindow::~ReportWindow()
@@ -83,6 +108,7 @@ ReportWindow::~ReportWindow()
 void ReportWindow::on_pushButton_back_clicked()
 {
     this->~ReportWindow();
+
     mainWindow->show();
 }
 
