@@ -26,9 +26,9 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
 
     ui->tabWidget->setCurrentIndex(0);
 
-    count_paragraph = count_of_symbol[5][27];
-    count_words = count_of_symbol[5][28] + 1;
-    count_proposal = counter_of_troitochie + count_of_symbol[5][0] + count_of_symbol[5][1] + count_of_symbol[5][2];
+    count_paragraph = count_of_symbol[2][27];
+    count_words = count_of_symbol[2][28] + 1;
+    count_proposal = counter_of_troitochie + count_of_symbol[2][0] + count_of_symbol[2][1] + count_of_symbol[2][2];
 
     for(int i = 0; i != 33; ++i){
         if(i == 0 || i == 5 || i == 6 || i == 9 || i == 15 || i == 20 || i == 28 || i == 30 || i == 31 || i == 32)
@@ -38,9 +38,9 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
     }
     for(int i = 0; i != 26; ++i){
         if(i == 0 || i == 4 || i == 8 || i == 14 || i == 20 || i == 24)
-            count_glasn += count_of_symbol[2][i] + count_of_symbol[3][i];
+            count_glasn += count_of_symbol[4][i] + count_of_symbol[5][i];
         else
-            count_soglasn += count_of_symbol[2][i] + count_of_symbol[3][i];
+            count_soglasn += count_of_symbol[4][i] + count_of_symbol[5][i];
     }
 
     for(int i = 0; i != ui->tableWidget_russian->rowCount(); ++i){
@@ -58,8 +58,8 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
     for(int i = 0; i != 2; ++i){
         for(int j = 0; j != ui->tableWidget_english->columnCount(); ++j){
             QTableWidgetItem *item = new QTableWidgetItem(MainWindow::Read_eng_small_letters(j+i*9) + " = " +\
-                                                          QString::number(count_of_symbol[2][j+i*9] + count_of_symbol[3][j+i*9]));
-            count_letters += count_of_symbol[2][j+i*9] + count_of_symbol[3][j+i*9];
+                                                          QString::number(count_of_symbol[4][j+i*9] + count_of_symbol[5][j+i*9]));
+            count_letters += count_of_symbol[4][j+i*9] + count_of_symbol[5][j+i*9];
             item->setToolTip(item->text());
             item->setTextAlignment(Qt::AlignCenter);
             item->setFlags(item->flags() &= ~Qt::ItemIsEditable);
@@ -69,8 +69,8 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
 
     for(int i = 2, j = 0; j != 8; ++j){
         QTableWidgetItem *item = new QTableWidgetItem(MainWindow::Read_eng_small_letters(j+i*9) + " = " +\
-                                                      QString::number(count_of_symbol[2][j+i*9] + count_of_symbol[3][j+i*9]));
-        count_letters += count_of_symbol[2][j+i*9] + count_of_symbol[3][j+i*9];
+                                                      QString::number(count_of_symbol[4][j+i*9] + count_of_symbol[5][j+i*9]));
+        count_letters += count_of_symbol[4][j+i*9] + count_of_symbol[5][j+i*9];
         item->setToolTip(item->text());
         item->setTextAlignment(Qt::AlignCenter);
         item->setFlags(item->flags() &= ~Qt::ItemIsEditable);
@@ -79,8 +79,8 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
 
     for(int i = 0; i != ui->tableWidget_number->columnCount(); ++i){
         QTableWidgetItem *item = new QTableWidgetItem("'" + MainWindow::Read_numbers(i) + "'" + " = " +\
-                                                      QString::number(count_of_symbol[4][i]));
-        count_numbers += count_of_symbol[4][i];
+                                                      QString::number(count_of_symbol[3][i]));
+        count_numbers += count_of_symbol[3][i];
         item->setToolTip(item->text());
         item->setTextAlignment(Qt::AlignCenter);
         item->setFlags(item->flags() &= ~Qt::ItemIsEditable);
@@ -90,7 +90,7 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
     for(int i = 0; i != ui->tableWidget_symbol->rowCount(); ++i){
         for(int j = 0; j != ui->tableWidget_symbol->columnCount(); ++j){
             QTableWidgetItem *item = new QTableWidgetItem("'" + MainWindow::Read_signs(j+i*9) + "'" + " = " +\
-                                                          QString::number(count_of_symbol[5][j+i*9]));
+                                                          QString::number(count_of_symbol[2][j+i*9]));
             item->setToolTip(item->text());
             item->setTextAlignment(Qt::AlignCenter);
             item->setFlags(item->flags() &= ~Qt::ItemIsEditable);

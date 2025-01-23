@@ -81,8 +81,8 @@ QString MainWindow::Read_signs(int num_val)
 
 void MainWindow::on_pushButton_ChooseFile_clicked()
 {
-    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/My_project/", "Text File (*.txt)");
-    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
+    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/My_project/", "Text File (*.txt)");
+    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
 
     QFile file(file_path);
     if(!file.open(QFile::ReadOnly | QFile::Text)){
@@ -108,6 +108,8 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
             ui->tableWidget->setItem(counter_row, i, column);
         }
 
+        stroka_of_ReportWindow[file_name + time] = {count_rus_small_letters, count_rus_big_letters, count_signs,\
+                                                    count_numbers, count_eng_small_letters, count_eng_big_letters};
         QTextStream in(&file);
         QString symbol;
         QString* ptr_symbol = &symbol;
@@ -116,9 +118,9 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
         while(in.readLineInto(ptr_symbol, 1)){
             bool interrupt = 1;
             if(interrupt){
-                for(size_t i = 0; i != count_rus_small_letters.size() ; ++i){
+                for(size_t i = 0; i != stroka_of_ReportWindow[file_name + time][0].size(); ++i){
                     if(*ptr_symbol == rus_small_letters[i]){
-                        count_rus_small_letters[i]++;
+                        stroka_of_ReportWindow[file_name + time][0][i]++;
                         counter_of_point = 0;
                         interrupt = 0;
                         break;
@@ -127,9 +129,9 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
             }
 
             if(interrupt){
-                for(size_t i = 0; i != count_rus_big_letters.size(); ++i){
+                for(size_t i = 0; i != stroka_of_ReportWindow[file_name + time][1].size(); ++i){
                     if(*ptr_symbol == rus_big_letters[i]){
-                        count_rus_big_letters[i]++;
+                        stroka_of_ReportWindow[file_name + time][1][i]++;
                         counter_of_point = 0;
                         interrupt = 0;
                         break;
@@ -138,15 +140,15 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
             }
 
             if(interrupt){
-                for(size_t i = 0; i != count_signs.size(); ++i){
+                for(size_t i = 0; i != stroka_of_ReportWindow[file_name + time][2].size(); ++i){
                     if(*ptr_symbol == signs[i]){
-                        count_signs[i]++;
+                        stroka_of_ReportWindow[file_name + time][2][i]++;
                         interrupt = 0;
                         if(i == 2){
                             counter_of_point++;
                             if(counter_of_point == 3){
                                 counter_of_troitochie++;
-                                count_signs[2] -= 3;
+                                stroka_of_ReportWindow[file_name + time][2][2] -= 3;
                                 counter_of_point = 0;
                             }
                         }
@@ -158,9 +160,9 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
             }
 
             if(interrupt){
-                for(size_t i = 0; i != count_numbers.size(); ++i){
+                for(size_t i = 0; i != stroka_of_ReportWindow[file_name + time][3].size(); ++i){
                     if(*ptr_symbol == numbers[i]){
-                        count_numbers[i]++;
+                        stroka_of_ReportWindow[file_name + time][3][i]++;
                         counter_of_point = 0;
                         interrupt = 0;
                         break;
@@ -169,9 +171,9 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
             }
 
             if(interrupt){
-                for(size_t i = 0; i != count_eng_small_letters.size(); ++i){
+                for(size_t i = 0; i != stroka_of_ReportWindow[file_name + time][4].size(); ++i){
                     if(*ptr_symbol == eng_small_letters[i]){
-                        count_eng_small_letters[i]++;
+                        stroka_of_ReportWindow[file_name + time][4][i]++;
                         counter_of_point = 0;
                         interrupt = 0;
                         break;
@@ -180,9 +182,9 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
             }
 
             if(interrupt){
-                for(size_t i = 0; i != count_eng_big_letters.size(); ++i){
+                for(size_t i = 0; i != stroka_of_ReportWindow[file_name + time][5].size(); ++i){
                     if(*ptr_symbol == eng_big_letters[i]){
-                        count_eng_big_letters[i]++;
+                        stroka_of_ReportWindow[file_name + time][5][i]++;
                         counter_of_point = 0;
                         interrupt = 0;
                         break;
@@ -190,10 +192,6 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
                 }
             }
         }
-
-
-        stroka_of_ReportWindow[file_name + time] = {count_rus_small_letters, count_rus_big_letters, count_eng_small_letters,\
-                                                    count_eng_big_letters, count_numbers, count_signs};
 
         file.close();
     }
