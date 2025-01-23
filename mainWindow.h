@@ -1,11 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "reportWindow.h"
 
 #include <QMainWindow>
 #include <QStatusBar>
 #include <QEvent>
-#include "reportWindow.h"
 #include <qtablewidget.h>
 #include <functional>
 #include <vector>
@@ -45,6 +45,12 @@ private slots:
 
     void on_pushButton_Report_clicked();
 
+signals:
+    void showPasswordWindow();
+
+public slots:
+    void ShowMyself();
+
 private:
     Ui::MainWindow *ui;
 
@@ -52,11 +58,12 @@ private:
     QString second_name;
     QString otchestvo;
 
-    QWidget *password_window;
-    QMainWindow *reportWindow;
+    ReportWindow *reportWindow;
 
     std::map <QString, std::vector <std::vector<int>>> stroka_of_ReportWindow;
     std::map <QString, std::vector <QString>> stroka_of_MainWindow;
+
+    QList<QString> column_name_mainWindow = {"Имя файла", "Путь к файлу", "Дата", "Время", "Фамилия", "Имя", "Отчество"};
 
     int counter_row = 0;
     int counter_of_troitochie = 0;

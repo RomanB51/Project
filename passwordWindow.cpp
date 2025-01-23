@@ -1,5 +1,9 @@
 ﻿#include "passwordWindow.h"
 #include "ui_passwordWindow.h"
+
+#include "mainWindow.h"
+
+
 #include <QMessageBox>
 #include <QKeyEvent>
 #include <QEvent>
@@ -15,23 +19,22 @@ PasswordWindow::PasswordWindow(QWidget *parent)
     ui->lineEdit_password->installEventFilter(this);
     ui->pushButton_Entry->installEventFilter(this);
     ui->pushButton_Entry->setAutoDefault(0);
-    ui->pushButton_Escape->setAutoDefault(0);
+    ui->pushButton_Exit->setAutoDefault(0);
     customAction = new QAction("Custom Action", ui->lineEdit_password);
     customAction->setIcon(QIcon(":/Images/Icons/Show.png"));
     customAction->setToolTip("Показать пароль");
     ui->lineEdit_password->addAction(customAction, QLineEdit::TrailingPosition);
     ui->lineEdit_password->setEchoMode(QLineEdit::Password);
     connect(customAction, &QAction::triggered, this, &PasswordWindow::Show_Hide_Password);
+
+    qDebug() << "Окно пароля создано";
 }
 
 PasswordWindow::~PasswordWindow()
 {
+    qDebug() << "Окно пароля уничтожено";
     delete ui;
 }
-
-
-bool flag_for_focus_enter_after_QMessage = 1;
-bool flag_for_show_hide = 0;
 
 
 void PasswordWindow::Show_Hide_Password(){
@@ -44,8 +47,8 @@ void PasswordWindow::Show_Hide_Password(){
     else{
         customAction->setIcon(QIcon(":/Images/Icons/Hide.png"));
         customAction->setToolTip("Скрыть пароль");
-        ui->lineEdit_password->setEchoMode(QLineEdit::Normal);
-        flag_for_show_hide = 1;
+         ui->lineEdit_password->setEchoMode(QLineEdit::Normal);
+         flag_for_show_hide = 1;
     }
 }
 
@@ -67,6 +70,11 @@ bool PasswordWindow::eventFilter(QObject *obj, QEvent *evt){
     return QDialog::eventFilter(obj, evt);
 }
 
+void PasswordWindow::ShowMe()
+{
+    this->show();
+}
+
 
 void PasswordWindow::on_pushButton_Entry_clicked()
 {
@@ -80,6 +88,7 @@ void PasswordWindow::on_pushButton_Entry_clicked()
         QString second_name = "Бычков";
         QString otchestvo = "Евгеньевич";
         mainWindow = new MainWindow(this, second_name, first_name, otchestvo);
+        connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);
         mainWindow->show();
     }
     else if(login == "1" && password == "1"){
@@ -88,6 +97,7 @@ void PasswordWindow::on_pushButton_Entry_clicked()
         QString second_name = "Вахрамеев";
         QString otchestvo = "Евгеньевич";
         mainWindow = new MainWindow(this, second_name, first_name, otchestvo);
+        connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);
         mainWindow->show();
         }
         else{
@@ -102,8 +112,8 @@ void PasswordWindow::on_pushButton_Entry_clicked()
 }
 
 
-void PasswordWindow::on_pushButton_Escape_clicked()
+void PasswordWindow::on_pushButton_Exit_clicked()
 {
-    this->close();
+    QApplication::quit();
 }
 

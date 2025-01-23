@@ -2,7 +2,6 @@
 #define REPORTWINDOW_H
 
 #include <QMainWindow>
-#include "mainWindow.h"
 
 namespace Ui {
 class ReportWindow;
@@ -20,9 +19,11 @@ public:
 private slots:
     void on_pushButton_back_clicked();
 
+signals:
+    void showMainTable();
+
 private:
     Ui::ReportWindow *ui;
-    QMainWindow *mainWindow;
     int count_letters = 0, count_paragraph = 0, count_proposal = 0, count_words = 0, count_numbers = 0, count_glasn = 0, count_soglasn = 0;
 
 

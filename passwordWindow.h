@@ -22,15 +22,21 @@ public:
 private slots:
     void on_pushButton_Entry_clicked();
 
-    void on_pushButton_Escape_clicked();
+    void on_pushButton_Exit_clicked();
 
     void Show_Hide_Password();
 
     bool eventFilter(QObject *obj, QEvent *evt);
 
+public slots:
+    void ShowMe();
+
 private:
     Ui::PasswordWindow *ui;
     MainWindow *mainWindow;
     QAction *customAction;
+
+    bool flag_for_focus_enter_after_QMessage = 1;
+    bool flag_for_show_hide = 0;
 };
 #endif // PASSWORDWINDOW_H

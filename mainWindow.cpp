@@ -1,6 +1,6 @@
 ﻿#include "mainWindow.h"
 #include "ui_mainWindow.h"
-#include "main.h"
+
 #include "reportWindow.h"
 
 
@@ -22,25 +22,27 @@ MainWindow::MainWindow(QWidget *parent, const QString &second_name, const QStrin
 {
     ui->setupUi(this);
 
+    this->setAttribute(Qt::WA_DeleteOnClose);
+
     this->first_name = first_name;
     this->second_name = second_name;
     this->otchestvo = otchestvo;
 
 
     ui->tableWidget->setColumnCount(7);
-    QList<QString> name_column_list_report = {"Имя файла", "Путь к файлу", "Дата", "Время", "Фамилия", "Имя", "Отчество"};
-    ui->tableWidget->setHorizontalHeaderLabels(name_column_list_report);
+    ui->tableWidget->setHorizontalHeaderLabels(column_name_mainWindow);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->installEventFilter(this);
 
     ui->statusbar->showMessage(this->second_name + " " + this->first_name + " " + this->otchestvo);
 
-    password_window = parent;
+    qDebug() << "Главное окно создано";
 
 }
 
 MainWindow::~MainWindow()
 {
+    qDebug() << "Главное окно уничтожено";
     delete ui;
 }
 
@@ -110,72 +112,86 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
         QString symbol;
         QString* ptr_symbol = &symbol;
 
+        int counter_of_point = 0; //служебная переменная для подсчета троеточий
         while(in.readLineInto(ptr_symbol, 1)){
             bool interrupt = 1;
-            // if(interrupt){
-            //     for(size_t i = 0; i != count_rus_small_letters.size() ; ++i){
-            //         if(*ptr_symbol == rus_small_letters[i]){
-            //             count_rus_small_letters[i]++;
-            //             interrupt = 0;
-            //             break;
-            //         }
-            //     }
-            // }
-            // if(interrupt){
-            //     for(size_t i = 0; i != count_rus_big_letters.size(); ++i){
-            //         if(*ptr_symbol == rus_big_letters[i]){
-            //             count_rus_big_letters[i]++;
-            //             interrupt = 0;
-            //             break;
-            //         }
-            //     }
-            // }
-            // if(interrupt){
-            //     for(size_t i = 0; i != count_numbers.size(); ++i){
-            //         if(*ptr_symbol == numbers[i]){
-            //             count_numbers[i]++;
-            //             interrupt = 0;
-            //             break;
-            //         }
-            //     }
-            // }
-            // if(interrupt){
-            //     for(size_t i = 0; i != count_eng_small_letters.size(); ++i){
-            //         if(*ptr_symbol == eng_small_letters[i]){
-            //             count_eng_small_letters[i]++;
-            //             interrupt = 0;
-            //             break;
-            //         }
-            //     }
-            // }
-            // if(interrupt){
-            //     for(size_t i = 0; i != count_eng_big_letters.size(); ++i){
-            //         if(*ptr_symbol == eng_big_letters[i]){
-            //             count_eng_big_letters[i]++;
-            //             interrupt = 0;
-            //             break;
-            //         }
-            //     }
-            // }
+            if(interrupt){
+                for(size_t i = 0; i != count_rus_small_letters.size() ; ++i){
+                    if(*ptr_symbol == rus_small_letters[i]){
+                        count_rus_small_letters[i]++;
+                        counter_of_point = 0;
+                        interrupt = 0;
+                        break;
+                    }
+                }
+            }
+
+            if(interrupt){
+                for(size_t i = 0; i != count_rus_big_letters.size(); ++i){
+                    if(*ptr_symbol == rus_big_letters[i]){
+                        count_rus_big_letters[i]++;
+                        counter_of_point = 0;
+                        interrupt = 0;
+                        break;
+                    }
+                }
+            }
+
             if(interrupt){
                 for(size_t i = 0; i != count_signs.size(); ++i){
                     if(*ptr_symbol == signs[i]){
                         count_signs[i]++;
                         interrupt = 0;
                         if(i == 2){
-                            if(in.readLineInto(ptr_symbol, 2)){
-                                if(*ptr_symbol == ".."){
-                                    counter_of_troitochie++;
-                                    count_signs[2]--;
-                                }
+                            counter_of_point++;
+                            if(counter_of_point == 3){
+                                counter_of_troitochie++;
+                                count_signs[2] -= 3;
+                                counter_of_point = 0;
                             }
                         }
+                        else
+                            counter_of_point = 0;
+                        break;
+                    }
+                }
+            }
+
+            if(interrupt){
+                for(size_t i = 0; i != count_numbers.size(); ++i){
+                    if(*ptr_symbol == numbers[i]){
+                        count_numbers[i]++;
+                        counter_of_point = 0;
+                        interrupt = 0;
+                        break;
+                    }
+                }
+            }
+
+            if(interrupt){
+                for(size_t i = 0; i != count_eng_small_letters.size(); ++i){
+                    if(*ptr_symbol == eng_small_letters[i]){
+                        count_eng_small_letters[i]++;
+                        counter_of_point = 0;
+                        interrupt = 0;
+                        break;
+                    }
+                }
+            }
+
+            if(interrupt){
+                for(size_t i = 0; i != count_eng_big_letters.size(); ++i){
+                    if(*ptr_symbol == eng_big_letters[i]){
+                        count_eng_big_letters[i]++;
+                        counter_of_point = 0;
+                        interrupt = 0;
                         break;
                     }
                 }
             }
         }
-        qDebug() << "Троеточие  " << counter_of_troitochie;
+
+
         stroka_of_ReportWindow[file_name + time] = {count_rus_small_letters, count_rus_big_letters, count_eng_small_letters,\
                                                     count_eng_big_letters, count_numbers, count_signs};
 
@@ -187,7 +203,7 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
 
 void MainWindow::on_pushButton_Close_clicked()
 {
-    this->close();
+    QApplication::quit();
 }
 
 
@@ -248,8 +264,8 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 
 void MainWindow::on_pushButton_Change_user_clicked()
 {
-    password_window->show();
-    this->~MainWindow();
+    emit showPasswordWindow();
+    this->close();
 }
 
 
@@ -261,14 +277,21 @@ void MainWindow::on_pushButton_Report_clicked()
         QTableWidgetItem *column_time = ui->tableWidget->item(ui->tableWidget->currentRow(), 3);
         QString file_name_row = column_file_name->text();
         QString time_row = column_time->text();
+        QString name_file_in_map = file_name_row + time_row;
         reportWindow = new ReportWindow(this, this->second_name, this->first_name, this->otchestvo,\
-                                        stroka_of_ReportWindow[file_name_row + time_row], counter_of_troitochie);
+                                        stroka_of_ReportWindow[name_file_in_map], counter_of_troitochie);
+        connect(reportWindow, &ReportWindow::showMainTable, this, &MainWindow::ShowMyself);
         this->hide();
         reportWindow->show();
     }
     else{
-        QMessageBox::warning(this, "Ошибка", "Ты не выбрал строку");
+        QMessageBox::warning(this, "Ошибка", "Выберите строку");
     }
 
+}
+
+void MainWindow::ShowMyself()
+{
+    this->show();
 }
 

@@ -1,6 +1,8 @@
 #include "reportWindow.h"
 #include "ui_reportWindow.h"
 
+#include "mainWindow.h"
+
 ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, const QString &first_name, const QString &otchestvo, \
                            std::vector<std::vector<int>> count_of_symbol, const int counter_of_troitochie)
     : QMainWindow(parent)
@@ -8,7 +10,7 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
 {
     ui->setupUi(this);
 
-    mainWindow = parent;
+    this->setAttribute(Qt::WA_DeleteOnClose);
 
     ui->statusbar->showMessage(second_name + " " + first_name + " " + otchestvo);
 
@@ -98,17 +100,19 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
     ui->lineEdit_number->setText(QString::number(count_numbers));
     ui->lineEdit_glasn_soglasn->setText(QString::number(count_glasn) + "/" + QString::number(count_soglasn));
 
+    qDebug() << "Окно отчета создано";
+
 }
 
 ReportWindow::~ReportWindow()
 {
+    qDebug() << "Окно букв уничтожено";
     delete ui;
 }
 
 void ReportWindow::on_pushButton_back_clicked()
 {
-    this->~ReportWindow();
-
-    mainWindow->show();
+    emit showMainTable();
+    this->close();
 }
 
