@@ -4,7 +4,7 @@
 #include "mainWindow.h"
 
 ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, const QString &first_name, const QString &otchestvo, \
-                           std::vector<std::vector<int>> count_of_symbol, const int counter_of_troitochie)
+                           const std::vector<std::vector<int>> count_of_symbol, const int counter_of_troitochie)
     : QMainWindow(parent)
     , ui(new Ui::ReportWindow)
 {
@@ -23,6 +23,8 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
     ui->tableWidget_english->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget_symbol->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget_number->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    ui->tabWidget->setCurrentIndex(0);
 
     count_paragraph = count_of_symbol[5][27];
     count_words = count_of_symbol[5][28] + 1;
@@ -45,6 +47,7 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
         for(int j = 0; j != ui->tableWidget_russian->columnCount(); ++j){
             QTableWidgetItem *item = new QTableWidgetItem(MainWindow::Read_rus_small_letters(j+i*11) + " = " +\
                                                         QString::number(count_of_symbol[0][j+i*11] + count_of_symbol[1][j+i*11]));
+            count_letters += count_of_symbol[0][j+i*11] + count_of_symbol[1][j+i*11];
             item->setToolTip(item->text());
             item->setTextAlignment(Qt::AlignCenter);
             item->setFlags(item->flags() &= ~Qt::ItemIsEditable);
@@ -56,6 +59,7 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
         for(int j = 0; j != ui->tableWidget_english->columnCount(); ++j){
             QTableWidgetItem *item = new QTableWidgetItem(MainWindow::Read_eng_small_letters(j+i*9) + " = " +\
                                                           QString::number(count_of_symbol[2][j+i*9] + count_of_symbol[3][j+i*9]));
+            count_letters += count_of_symbol[2][j+i*9] + count_of_symbol[3][j+i*9];
             item->setToolTip(item->text());
             item->setTextAlignment(Qt::AlignCenter);
             item->setFlags(item->flags() &= ~Qt::ItemIsEditable);
@@ -66,6 +70,7 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
     for(int i = 2, j = 0; j != 8; ++j){
         QTableWidgetItem *item = new QTableWidgetItem(MainWindow::Read_eng_small_letters(j+i*9) + " = " +\
                                                       QString::number(count_of_symbol[2][j+i*9] + count_of_symbol[3][j+i*9]));
+        count_letters += count_of_symbol[2][j+i*9] + count_of_symbol[3][j+i*9];
         item->setToolTip(item->text());
         item->setTextAlignment(Qt::AlignCenter);
         item->setFlags(item->flags() &= ~Qt::ItemIsEditable);
@@ -93,7 +98,7 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
         }
     }
 
-    ui->lineEdit_letters->setText(QString::number(count_glasn + count_soglasn));
+    ui->lineEdit_letters->setText(QString::number(count_letters));
     ui->lineEdit_paragraph->setText(QString::number(count_paragraph));
     ui->lineEdit_proposal->setText(QString::number(count_proposal));
     ui->lineEdit_word->setText(QString::number(count_words));
