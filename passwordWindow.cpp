@@ -9,12 +9,14 @@
 #include <QEvent>
 #include <QAction>
 #include <QLineEdit>
+#include <QWindow>
 
 PasswordWindow::PasswordWindow(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::PasswordWindow)
 {
     ui->setupUi(this);
+
     ui->lineEdit_login->installEventFilter(this);
     ui->lineEdit_password->installEventFilter(this);
     ui->pushButton_Entry->installEventFilter(this);
@@ -27,6 +29,8 @@ PasswordWindow::PasswordWindow(QWidget *parent)
     ui->lineEdit_password->setEchoMode(QLineEdit::Password);
     connect(customAction, &QAction::triggered, this, &PasswordWindow::Show_Hide_Password);
 
+    setWindowIcon(QIcon(":/Images/Icons/WindowIcon.jpg"));
+
     qDebug() << "Окно пароля создано";
 }
 
@@ -38,17 +42,17 @@ PasswordWindow::~PasswordWindow()
 
 
 void PasswordWindow::Show_Hide_Password(){
-    if(flag_for_show_hide){
+    flag_for_show_hide_password = !flag_for_show_hide_password;
+
+    if(flag_for_show_hide_password){
         customAction->setIcon(QIcon(":/Images/Icons/Show.png"));
         customAction->setToolTip("Показать пароль");
         ui->lineEdit_password->setEchoMode(QLineEdit::Password);
-        flag_for_show_hide = 0;
     }
     else{
         customAction->setIcon(QIcon(":/Images/Icons/Hide.png"));
         customAction->setToolTip("Скрыть пароль");
          ui->lineEdit_password->setEchoMode(QLineEdit::Normal);
-         flag_for_show_hide = 1;
     }
 }
 
@@ -87,7 +91,9 @@ void PasswordWindow::on_pushButton_Entry_clicked()
         QString first_name = "Роман";
         QString second_name = "Бычков";
         QString otchestvo = "Евгеньевич";
-        mainWindow = new MainWindow(this, second_name, first_name, otchestvo);
+        QString ip_adress = "197.168.0.105";
+        flag_admin_user = 0;
+        mainWindow = new MainWindow(this, second_name, first_name, otchestvo, ip_adress, flag_admin_user);
         connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);
         mainWindow->show();
     }
@@ -96,7 +102,9 @@ void PasswordWindow::on_pushButton_Entry_clicked()
         QString first_name = "Василий";
         QString second_name = "Вахрамеев";
         QString otchestvo = "Евгеньевич";
-        mainWindow = new MainWindow(this, second_name, first_name, otchestvo);
+        QString ip_adress = "197.168.0.105";
+        flag_admin_user = 1;
+        mainWindow = new MainWindow(this, second_name, first_name, otchestvo, ip_adress, flag_admin_user);
         connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);
         mainWindow->show();
         }

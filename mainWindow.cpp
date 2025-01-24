@@ -16,7 +16,8 @@
 #include <vector>
 #include <QTextStream>
 
-MainWindow::MainWindow(QWidget *parent, const QString &second_name, const QString &first_name, const QString &otchestvo)
+MainWindow::MainWindow(QWidget *parent, const QString &second_name, const QString &first_name, const QString &otchestvo, \
+                       const QString ip_adress, const bool flag_admin_user)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -27,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent, const QString &second_name, const QStrin
     this->first_name = first_name;
     this->second_name = second_name;
     this->otchestvo = otchestvo;
+    this->ip_adress = ip_adress;
+    this->flag_admin_user = flag_admin_user;
 
 
     ui->tableWidget->setColumnCount(7);
@@ -34,7 +37,14 @@ MainWindow::MainWindow(QWidget *parent, const QString &second_name, const QStrin
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->installEventFilter(this);
 
-    ui->statusbar->showMessage(this->second_name + " " + this->first_name + " " + this->otchestvo);
+    name_label_for_statusbar = new QLabel(this->second_name + " " + this->first_name + " " + this->otchestvo, this);
+    ip_label_for_statusbar = new QLabel(this->ip_adress, this);
+    file_name_label_for_statusbar = new QLabel("", this);
+    ui->statusbar->addPermanentWidget(name_label_for_statusbar, 1);
+    ui->statusbar->addPermanentWidget(ip_label_for_statusbar, 1);
+    ui->statusbar->addPermanentWidget(file_name_label_for_statusbar, 1);
+
+    ui->pushButton_day_night_theme->setIcon(QIcon(":/Images/Icons/Dark.png"));
 
     qDebug() << "Главное окно создано";
 
@@ -81,8 +91,8 @@ QString MainWindow::Read_signs(int num_val)
 
 void MainWindow::on_pushButton_ChooseFile_clicked()
 {
-    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/My_project/", "Text File (*.txt)");
-    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
+    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/My_project/", "Text File (*.txt)");
+    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
 
     QFile file(file_path);
     if(!file.open(QFile::ReadOnly | QFile::Text)){
@@ -103,6 +113,8 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
 
         for(int i = 0; i != ui->tableWidget->columnCount(); i++){
             QTableWidgetItem *column = new QTableWidgetItem(stroka_of_MainWindow[file_name + time][i]);
+            if(!flag_admin_user)
+                column->setFlags(column->flags() &= ~Qt::ItemIsEditable);
             column->setToolTip(stroka_of_MainWindow[file_name + time][i]);
             column->setTextAlignment(Qt::AlignCenter);
             ui->tableWidget->setItem(counter_row, i, column);
@@ -214,8 +226,9 @@ void MainWindow::on_pushButton_Delete_str_clicked()
     QString file_name_del_row = column_file_name->text();
     QString time_del_row = column_time->text();
 
-    stroka_of_MainWindow.erase(file_name_del_row + time_del_row);
     ui->tableWidget->removeRow(index_del_row);
+    stroka_of_MainWindow.erase(file_name_del_row + time_del_row);
+    stroka_of_ReportWindow.erase(file_name_del_row + time_del_row);
 
 }
 
@@ -231,12 +244,22 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *evt){
             QString text_of_new_item = new_item->text();
             if(text_of_new_item != text_of_old_item && text_of_new_item != ""){
                 new_item->setToolTip(text_of_new_item);
+                stroka_of_MainWindow[key_of_map][number_of_change_column] = text_of_new_item;
+
                 QTableWidgetItem *column_time = ui->tableWidget->item(ui->tableWidget->currentRow(), 3);
                 QString time_change_row = column_time->text();
-                stroka_of_MainWindow[key_of_map][number_of_change_column] = text_of_new_item;
-                auto new_key_node = stroka_of_MainWindow.extract(key_of_map);
-                new_key_node.key() = text_of_new_item + time_change_row;
-                stroka_of_MainWindow.insert(std::move(new_key_node));
+                QTableWidgetItem *column_file_name = ui->tableWidget->item(ui->tableWidget->currentRow(), 0);
+                QString file_name_change_row = column_file_name->text();
+
+                auto new_key_node_stroka_of_MainWindow = stroka_of_MainWindow.extract(key_of_map);
+                auto new_key_node_stroka_of_ReportWindow = stroka_of_ReportWindow.extract(key_of_map);
+
+
+                new_key_node_stroka_of_MainWindow.key() = file_name_change_row + time_change_row;
+                new_key_node_stroka_of_ReportWindow.key() = file_name_change_row + time_change_row;
+
+                stroka_of_MainWindow.insert(std::move(new_key_node_stroka_of_MainWindow));
+                stroka_of_ReportWindow.insert(std::move(new_key_node_stroka_of_ReportWindow));
             }
             else{
                 new_item->setText(text_of_old_item);
@@ -253,8 +276,10 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
     QTableWidgetItem *column_time = ui->tableWidget->item(ui->tableWidget->currentRow(), 3);
     QString file_name_change_row = column_file_name->text();
     QString time_change_row = column_time->text();
-    number_of_change_column = ui->tableWidget->currentColumn();
     key_of_map = file_name_change_row + time_change_row;
+
+    number_of_change_column = ui->tableWidget->currentColumn();
+
     QTableWidgetItem *new_item = ui->tableWidget->currentItem();
     text_of_old_item = new_item->text();
 }
@@ -275,11 +300,13 @@ void MainWindow::on_pushButton_Report_clicked()
         QTableWidgetItem *column_time = ui->tableWidget->item(ui->tableWidget->currentRow(), 3);
         QString file_name_row = column_file_name->text();
         QString time_row = column_time->text();
+
         QString name_file_in_map = file_name_row + time_row;
-        reportWindow = new ReportWindow(this, this->second_name, this->first_name, this->otchestvo,\
+
+        reportWindow = new ReportWindow(this, this->second_name, this->first_name, this->otchestvo, this->ip_adress, file_name_row,\
                                         stroka_of_ReportWindow[name_file_in_map], counter_of_troitochie);
+
         connect(reportWindow, &ReportWindow::showMainTable, this, &MainWindow::ShowMyself);
-        this->hide();
         reportWindow->show();
     }
     else{
@@ -291,5 +318,31 @@ void MainWindow::on_pushButton_Report_clicked()
 void MainWindow::ShowMyself()
 {
     this->show();
+}
+
+
+void MainWindow::on_pushButton_day_night_theme_clicked()
+{
+    shine_dark_mode = !shine_dark_mode;
+    if(shine_dark_mode){
+        ui->pushButton_day_night_theme->setIcon(QIcon(":/Images/Icons/Dark.png"));
+        QPalette darkPalette;
+
+        darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
+        darkPalette.setColor(QPalette::WindowText, Qt::white);
+        darkPalette.setColor(QPalette::Base, QColor(25, 25, 25));
+        darkPalette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
+        darkPalette.setColor(QPalette::ToolTipBase, QColor(53, 53, 53));
+        darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+        darkPalette.setColor(QPalette::Text, Qt::white);
+        darkPalette.setColor(QPalette::Button, QColor(53, 53, 53));
+        darkPalette.setColor(QPalette::ButtonText, Qt::white);
+
+        qApp->setPalette(darkPalette);
+    }
+    else{
+        ui->pushButton_day_night_theme->setIcon(QIcon(":/Images/Icons/Shine.png"));
+        qApp->setPalette(style()->standardPalette());
+    }
 }
 

@@ -4,7 +4,8 @@
 #include "mainWindow.h"
 
 ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, const QString &first_name, const QString &otchestvo, \
-                           const std::vector<std::vector<int>> count_of_symbol, const int counter_of_troitochie)
+                           const QString& ip_adress, const QString& file_name, const std::vector<std::vector<int>> count_of_symbol,
+                           const int counter_of_troitochie)
     : QMainWindow(parent)
     , ui(new Ui::ReportWindow)
 {
@@ -12,7 +13,13 @@ ReportWindow::ReportWindow(QMainWindow *parent, const QString &second_name, cons
 
     this->setAttribute(Qt::WA_DeleteOnClose);
 
-    ui->statusbar->showMessage(second_name + " " + first_name + " " + otchestvo);
+    name_label_for_statusbar = new QLabel(second_name + " " + first_name + " " + otchestvo, this);
+    ip_label_for_statusbar = new QLabel(ip_adress, this);
+    file_name_label_for_statusbar = new QLabel(file_name, this);
+    file_name_label_for_statusbar->setAlignment(Qt::AlignRight);
+    ui->statusbar->addPermanentWidget(name_label_for_statusbar, 1);
+    ui->statusbar->addPermanentWidget(ip_label_for_statusbar, 1);
+    ui->statusbar->addPermanentWidget(file_name_label_for_statusbar, 1);
 
     ui->tableWidget_russian->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget_english->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -117,7 +124,6 @@ ReportWindow::~ReportWindow()
 
 void ReportWindow::on_pushButton_back_clicked()
 {
-    emit showMainTable();
     this->close();
 }
 

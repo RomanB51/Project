@@ -2,5 +2,8 @@
     <qresource prefix="/Images">
         <file>Icons/Show.png</file>
         <file>Icons/Hide.png</file>
+        <file>Icons/Dark.png</file>
+        <file>Icons/Shine.png</file>
+        <file>Icons/WindowIcon.jpg</file>
     </qresource>
 </RCC>

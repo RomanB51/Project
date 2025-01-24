@@ -7,7 +7,7 @@
 #include <QStatusBar>
 #include <QEvent>
 #include <qtablewidget.h>
-#include <functional>
+#include <QLabel>
 #include <vector>
 
 namespace Ui {
@@ -20,7 +20,8 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr, const QString& second_name = "", const QString& first_name = "",\
-                        const QString& otchestvo = "");
+                        const QString& otchestvo = "", const QString ip_adress = "Связь с базой данных не установлена",\
+                        const bool flag_admin_user = 0);
     ~MainWindow();
 
     static QString Read_rus_small_letters(int num_val);
@@ -45,6 +46,8 @@ private slots:
 
     void on_pushButton_Report_clicked();
 
+    void on_pushButton_day_night_theme_clicked();
+
 signals:
     void showPasswordWindow();
 
@@ -57,6 +60,10 @@ private:
     QString first_name;
     QString second_name;
     QString otchestvo;
+    QString ip_adress;
+
+    bool shine_dark_mode = 0;
+    bool flag_admin_user;
 
     ReportWindow *reportWindow;
 
@@ -88,6 +95,11 @@ private:
 
     static const QString signs[29];
     std::vector<int> count_signs = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+
+    QLabel *name_label_for_statusbar;
+    QLabel *ip_label_for_statusbar;
+    QLabel *file_name_label_for_statusbar;
 };
 
 #endif // MAINWINDOW_H
