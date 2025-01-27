@@ -9,7 +9,7 @@
 #include <QEvent>
 #include <QAction>
 #include <QLineEdit>
-#include <QWindow>
+#include <QDir>
 
 PasswordWindow::PasswordWindow(QWidget *parent)
     : QDialog(parent)
@@ -33,7 +33,12 @@ PasswordWindow::PasswordWindow(QWidget *parent)
 
     qDebug() << "Окно пароля создано";
 
-    QFile file("D:/C++/My_project/Project/Configuration of DB.txt");
+    QDir programmDir = QDir::current();
+    programmDir.cdUp();
+    programmDir.cdUp();
+    QString file_path = programmDir.absoluteFilePath("Configuration of DB.txt");
+
+    QFile file(file_path);
     if(file.open(QFile::ReadOnly | QFile::Text))
     {
         qDebug()<<"Файл открыт";
