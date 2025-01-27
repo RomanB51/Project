@@ -3,6 +3,9 @@
 
 #include <QDialog>
 #include <QAction>
+#include <QTextStream>
+#include <QFile>
+
 #include "mainWindow.h"
 
 QT_BEGIN_NAMESPACE
@@ -18,6 +21,8 @@ class PasswordWindow : public QDialog
 public:
     PasswordWindow(QWidget *parent = nullptr);
     ~PasswordWindow();
+
+    void read_data_about_DB(QFile &object);
 
 private slots:
     void on_pushButton_Entry_clicked();
@@ -36,9 +41,11 @@ private:
     MainWindow *mainWindow;
     QAction *customAction;
 
-
     bool flag_for_focus_enter_after_QMessage = 1;
     bool flag_for_show_hide_password = 1;
     bool flag_admin_user = 0;
+
+    std::vector<QString> data_about_DB = {"", "", "", ""};
+
 };
 #endif // PASSWORDWINDOW_H

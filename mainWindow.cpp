@@ -5,7 +5,6 @@
 
 
 #include <QDateTime>
-#include <QFile>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QGuiApplication>
@@ -14,7 +13,6 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <vector>
-#include <QTextStream>
 
 MainWindow::MainWindow(QWidget *parent, const QString &second_name, const QString &first_name, const QString &otchestvo, \
                        const QString ip_adress, const bool flag_admin_user)
@@ -115,6 +113,7 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
             QTableWidgetItem *column = new QTableWidgetItem(stroka_of_MainWindow[file_name + time][i]);
             if(!flag_admin_user)
                 column->setFlags(column->flags() &= ~Qt::ItemIsEditable);
+            column->setBackground(Qt::red);
             column->setToolTip(stroka_of_MainWindow[file_name + time][i]);
             column->setTextAlignment(Qt::AlignCenter);
             ui->tableWidget->setItem(counter_row, i, column);
@@ -122,88 +121,7 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
 
         stroka_of_ReportWindow[file_name + time] = {count_rus_small_letters, count_rus_big_letters, count_signs,\
                                                     count_numbers, count_eng_small_letters, count_eng_big_letters};
-        QTextStream in(&file);
-        QString symbol;
-        QString* ptr_symbol = &symbol;
-
-        int counter_of_point = 0; //служебная переменная для подсчета троеточий
-        while(in.readLineInto(ptr_symbol, 1)){
-            bool interrupt = 1;
-            if(interrupt){
-                for(size_t i = 0; i != stroka_of_ReportWindow[file_name + time][0].size(); ++i){
-                    if(*ptr_symbol == rus_small_letters[i]){
-                        stroka_of_ReportWindow[file_name + time][0][i]++;
-                        counter_of_point = 0;
-                        interrupt = 0;
-                        break;
-                    }
-                }
-            }
-
-            if(interrupt){
-                for(size_t i = 0; i != stroka_of_ReportWindow[file_name + time][1].size(); ++i){
-                    if(*ptr_symbol == rus_big_letters[i]){
-                        stroka_of_ReportWindow[file_name + time][1][i]++;
-                        counter_of_point = 0;
-                        interrupt = 0;
-                        break;
-                    }
-                }
-            }
-
-            if(interrupt){
-                for(size_t i = 0; i != stroka_of_ReportWindow[file_name + time][2].size(); ++i){
-                    if(*ptr_symbol == signs[i]){
-                        stroka_of_ReportWindow[file_name + time][2][i]++;
-                        interrupt = 0;
-                        if(i == 2){
-                            counter_of_point++;
-                            if(counter_of_point == 3){
-                                counter_of_troitochie++;
-                                stroka_of_ReportWindow[file_name + time][2][2] -= 3;
-                                counter_of_point = 0;
-                            }
-                        }
-                        else
-                            counter_of_point = 0;
-                        break;
-                    }
-                }
-            }
-
-            if(interrupt){
-                for(size_t i = 0; i != stroka_of_ReportWindow[file_name + time][3].size(); ++i){
-                    if(*ptr_symbol == numbers[i]){
-                        stroka_of_ReportWindow[file_name + time][3][i]++;
-                        counter_of_point = 0;
-                        interrupt = 0;
-                        break;
-                    }
-                }
-            }
-
-            if(interrupt){
-                for(size_t i = 0; i != stroka_of_ReportWindow[file_name + time][4].size(); ++i){
-                    if(*ptr_symbol == eng_small_letters[i]){
-                        stroka_of_ReportWindow[file_name + time][4][i]++;
-                        counter_of_point = 0;
-                        interrupt = 0;
-                        break;
-                    }
-                }
-            }
-
-            if(interrupt){
-                for(size_t i = 0; i != stroka_of_ReportWindow[file_name + time][5].size(); ++i){
-                    if(*ptr_symbol == eng_big_letters[i]){
-                        stroka_of_ReportWindow[file_name + time][5][i]++;
-                        counter_of_point = 0;
-                        interrupt = 0;
-                        break;
-                    }
-                }
-            }
-        }
+        func_counter_symbol(file, file_name + time);
 
         file.close();
     }
@@ -213,7 +131,7 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
 
 void MainWindow::on_pushButton_Close_clicked()
 {
-    QApplication::quit();
+    qApp->quit();
 }
 
 
@@ -345,4 +263,3 @@ void MainWindow::on_pushButton_day_night_theme_clicked()
         qApp->setPalette(style()->standardPalette());
     }
 }
-

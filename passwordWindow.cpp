@@ -29,9 +29,31 @@ PasswordWindow::PasswordWindow(QWidget *parent)
     ui->lineEdit_password->setEchoMode(QLineEdit::Password);
     connect(customAction, &QAction::triggered, this, &PasswordWindow::Show_Hide_Password);
 
-    setWindowIcon(QIcon(":/Images/Icons/WindowIcon.jpg"));
+    qApp->setWindowIcon(QIcon(":/Images/Icons/WindowIcon.jpg"));
 
     qDebug() << "Окно пароля создано";
+
+    QFile file("D:/C++/My_project/Project/Configuration of DB.txt");
+    if(file.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug()<<"Файл открыт";
+        read_data_about_DB(file);
+
+    }
+    else{
+        qDebug()<<"Файл создан";
+        file.open(QFile::WriteOnly | QFile::Text);
+        QTextStream out(&file);
+        out << "Ip adress = 'insert here ip adress of your DB'\n"
+               "Username in DB = 'insert here username in your DB'\n"
+               "Name of DB = 'insert here name of your DB'\n"
+               "Name of table = 'insert here name of table'";
+        file.flush();
+        file.close();
+        QMessageBox::information(this, "Ошибка подключения", "Файл 'Configuration of DB' вероятно был удален.\
+                                                              Введите в нем необходимые данные и перезапустите приложение.");
+        qApp->quit();
+    }
 }
 
 PasswordWindow::~PasswordWindow()
@@ -52,7 +74,7 @@ void PasswordWindow::Show_Hide_Password(){
     else{
         customAction->setIcon(QIcon(":/Images/Icons/Hide.png"));
         customAction->setToolTip("Скрыть пароль");
-         ui->lineEdit_password->setEchoMode(QLineEdit::Normal);
+        ui->lineEdit_password->setEchoMode(QLineEdit::Normal);
     }
 }
 
@@ -91,7 +113,7 @@ void PasswordWindow::on_pushButton_Entry_clicked()
         QString first_name = "Роман";
         QString second_name = "Бычков";
         QString otchestvo = "Евгеньевич";
-        QString ip_adress = "197.168.0.105";
+        QString ip_adress = data_about_DB[0];
         flag_admin_user = 0;
         mainWindow = new MainWindow(this, second_name, first_name, otchestvo, ip_adress, flag_admin_user);
         connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);
@@ -102,7 +124,7 @@ void PasswordWindow::on_pushButton_Entry_clicked()
         QString first_name = "Василий";
         QString second_name = "Вахрамеев";
         QString otchestvo = "Евгеньевич";
-        QString ip_adress = "197.168.0.105";
+        QString ip_adress = data_about_DB[0];
         flag_admin_user = 1;
         mainWindow = new MainWindow(this, second_name, first_name, otchestvo, ip_adress, flag_admin_user);
         connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);
@@ -122,6 +144,27 @@ void PasswordWindow::on_pushButton_Entry_clicked()
 
 void PasswordWindow::on_pushButton_Exit_clicked()
 {
-    QApplication::quit();
+    qApp->quit();
+}
+
+void PasswordWindow::read_data_about_DB(QFile &object)
+{
+    QTextStream in(&object);
+    QString symbol;
+    QString* ptr_symbol = &symbol;
+    int i = 0;
+
+
+    while(in.readLineInto(ptr_symbol, 1)){
+        if(*ptr_symbol == "'"){
+            in.readLineInto(ptr_symbol, 1);
+            while(*ptr_symbol != "'"){
+                data_about_DB[i] += *ptr_symbol;
+                in.readLineInto(ptr_symbol, 1);
+            }
+            i++;
+        }
+    }
+    object.close();
 }
 

@@ -1,0 +1,4 @@
+Ip adress = 'insert here ip adress of your DB'
+Username in DB = 'insert here username in your DB'
+Name of DB = 'insert here name of your DB'
+Name of table = 'insert here name of table'

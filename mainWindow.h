@@ -9,6 +9,7 @@
 #include <qtablewidget.h>
 #include <QLabel>
 #include <vector>
+#include <QFile>
 
 namespace Ui {
 class MainWindow;
@@ -23,6 +24,8 @@ public:
                         const QString& otchestvo = "", const QString ip_adress = "Связь с базой данных не установлена",\
                         const bool flag_admin_user = 0);
     ~MainWindow();
+
+    void func_counter_symbol(QFile &object, const QString &id_in_map);
 
     static QString Read_rus_small_letters(int num_val);
     static QString Read_eng_small_letters(int num_val);
