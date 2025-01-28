@@ -51,6 +51,8 @@ private slots:
 
     void on_pushButton_day_night_theme_clicked();
 
+    void on_pushButton_export_to_BD_clicked();
+
 signals:
     void showPasswordWindow();
 

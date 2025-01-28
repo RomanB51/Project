@@ -101,12 +101,13 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
         ui->tableWidget->insertRow(counter_row);
         QFileInfo file_info(file_path);
         QString file_name = file_info.baseName();
-        QString first_name = this->first_name;
-        QString second_name = this->second_name;
-        QString otchestvo = this->otchestvo;
-        QString time = QTime::currentTime().toString("hh : mm : ss");
         QString date = QDate::currentDate().toString("dd.MM.yyyy");
-        stroka_of_MainWindow[file_name + time] = {file_name, file_path, date, time, second_name, first_name, otchestvo};
+        QString time = QTime::currentTime().toString("hh : mm : ss");
+        QString second_name = this->second_name;
+        QString first_name = this->first_name;
+        QString otchestvo = this->otchestvo;
+        QString status_in_DB = "0";
+        stroka_of_MainWindow[file_name + time] = {file_name, file_path, date, time, second_name, first_name, otchestvo, status_in_DB};
 
 
         for(int i = 0; i != ui->tableWidget->columnCount(); i++){
@@ -263,3 +264,16 @@ void MainWindow::on_pushButton_day_night_theme_clicked()
         qApp->setPalette(style()->standardPalette());
     }
 }
+
+
+
+
+void MainWindow::on_pushButton_export_to_BD_clicked()
+{
+    for(const auto& [key, info] : stroka_of_MainWindow){
+        if(info[7] == "0"){
+            qDebug() << info[0] + info[3];
+        }
+    }
+}
+

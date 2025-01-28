@@ -41,12 +41,9 @@ PasswordWindow::PasswordWindow(QWidget *parent)
     QFile file(file_path);
     if(file.open(QFile::ReadOnly | QFile::Text))
     {
-        qDebug()<<"Файл открыт";
         read_data_about_DB(file);
-
     }
     else{
-        qDebug()<<"Файл создан";
         file.open(QFile::WriteOnly | QFile::Text);
         QTextStream out(&file);
         out << "Ip adress = 'insert here ip adress of your DB'\n"
