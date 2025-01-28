@@ -20,9 +20,9 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr, const QString& second_name = "", const QString& first_name = "",\
+    explicit MainWindow(const QString& second_name = "", const QString& first_name = "",\
                         const QString& otchestvo = "", const QString ip_adress = "Связь с базой данных не установлена",\
-                        const bool flag_admin_user = 0);
+                        const bool flag_admin_user = 0, QWidget *parent = nullptr);
     ~MainWindow();
 
     void func_counter_symbol(QFile &object, const QString &id_in_map);

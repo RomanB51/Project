@@ -38,12 +38,11 @@ public slots:
 
 private:
     Ui::PasswordWindow *ui;
-    MainWindow *mainWindow;
     QAction *customAction;
 
     bool flag_for_focus_enter_after_QMessage = 1;
     bool flag_for_show_hide_password = 1;
-    bool flag_admin_user = 0;
+    //bool flag_admin_user = 0;
 
     std::vector<QString> data_about_DB = {"", "", "", ""};
 

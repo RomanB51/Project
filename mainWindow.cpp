@@ -1,7 +1,7 @@
 ﻿#include "mainWindow.h"
 #include "ui_mainWindow.h"
 
-#include "reportWindow.h"
+#include "passwordWindow.h"
 
 
 #include <QDateTime>
@@ -14,8 +14,8 @@
 #include <QMouseEvent>
 #include <vector>
 
-MainWindow::MainWindow(QWidget *parent, const QString &second_name, const QString &first_name, const QString &otchestvo, \
-                       const QString ip_adress, const bool flag_admin_user)
+MainWindow::MainWindow(const QString &second_name, const QString &first_name, const QString &otchestvo, \
+                       const QString ip_adress, const bool flag_admin_user, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -205,7 +205,8 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 
 void MainWindow::on_pushButton_Change_user_clicked()
 {
-    emit showPasswordWindow();
+    PasswordWindow *mainWindow = new PasswordWindow();
+    mainWindow->show();
     this->close();
 }
 

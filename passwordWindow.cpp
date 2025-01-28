@@ -17,6 +17,8 @@ PasswordWindow::PasswordWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    this->setAttribute(Qt::WA_DeleteOnClose);
+
     ui->lineEdit_login->installEventFilter(this);
     ui->lineEdit_password->installEventFilter(this);
     ui->pushButton_Entry->installEventFilter(this);
@@ -39,11 +41,9 @@ PasswordWindow::PasswordWindow(QWidget *parent)
     QString file_path = programmDir.absoluteFilePath("Configuration of DB.txt");
 
     QFile file(file_path);
-    if(file.open(QFile::ReadOnly | QFile::Text))
-    {
+    if(file.open(QFile::ReadOnly | QFile::Text)){
         qDebug()<<"Файл открыт";
         read_data_about_DB(file);
-
     }
     else{
         qDebug()<<"Файл создан";
@@ -114,26 +114,24 @@ void PasswordWindow::on_pushButton_Entry_clicked()
 
 
     if(login == "" && password == ""){
-        this->hide();
         QString first_name = "Роман";
         QString second_name = "Бычков";
         QString otchestvo = "Евгеньевич";
         QString ip_adress = data_about_DB[0];
-        flag_admin_user = 0;
-        mainWindow = new MainWindow(this, second_name, first_name, otchestvo, ip_adress, flag_admin_user);
-        connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);
+        bool flag_admin_user = 0;
+        MainWindow *mainWindow = new MainWindow(second_name, first_name, otchestvo, ip_adress, flag_admin_user);
         mainWindow->show();
+        this->close();
     }
     else if(login == "1" && password == "1"){
-        this->hide();
         QString first_name = "Василий";
         QString second_name = "Вахрамеев";
         QString otchestvo = "Евгеньевич";
         QString ip_adress = data_about_DB[0];
-        flag_admin_user = 1;
-        mainWindow = new MainWindow(this, second_name, first_name, otchestvo, ip_adress, flag_admin_user);
-        connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);
+        bool flag_admin_user = 1;
+        MainWindow *mainWindow = new MainWindow(second_name, first_name, otchestvo, ip_adress, flag_admin_user);
         mainWindow->show();
+        this->close();
         }
         else{
             QMessageBox::information(this, "Ошибка авторизации", "Логин или пароль введены неверно");
