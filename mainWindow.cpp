@@ -65,25 +65,40 @@ const QString MainWindow::numbers[10] = {"0", "1", "2", "3", "4", "5", "6", "7",
 const QString MainWindow::signs[29] = {"!", "?", ".", ",", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "+", "=",
                                         "{", "}", "[", "]", "|", "/", "<", ">", ":", ";", "'", "\n", " "};
 
-QString MainWindow::Read_rus_small_letters(int num_val)
-{
-    return rus_small_letters[num_val];
-}
+QString MainWindow::Read_rus_small_letters(int num_val){return rus_small_letters[num_val];}
 
-QString MainWindow::Read_eng_small_letters(int num_val)
-{
-    return eng_small_letters[num_val];
-}
+QString MainWindow::Read_eng_small_letters(int num_val){return eng_small_letters[num_val];}
 
-QString MainWindow::Read_numbers(int num_val)
-{
-    return numbers[num_val];
-}
+QString MainWindow::Read_numbers(int num_val){return numbers[num_val];}
 
-QString MainWindow::Read_signs(int num_val)
-{
-    return signs[num_val];
-}
+QString MainWindow::Read_signs(int num_val){return signs[num_val];}
+
+
+QString MainWindow::filter_second_name = "";
+
+QString MainWindow::filter_first_name = "";
+
+QString MainWindow::filter_otchestvo = "";
+
+QString MainWindow::filter_file_name = "";
+
+QString MainWindow::filter_date = "";
+
+QString MainWindow::filter_counter_last_report = "";
+
+void MainWindow::set_filter_second_name(QString newVal){filter_second_name = newVal;}
+
+void MainWindow::set_filter_first_name(QString newVal){filter_first_name = newVal;}
+
+void MainWindow::set_filter_otchestvo(QString newVal){filter_otchestvo = newVal;}
+
+void MainWindow::set_filter_file_name(QString newVal){filter_file_name = newVal;}
+
+void MainWindow::set_filter_date(QString newVal){filter_date = newVal;}
+
+void MainWindow::set_filter_counter_last_report(QString newVal){filter_counter_last_report = newVal;}
+
+
 
 
 
@@ -275,5 +290,13 @@ void MainWindow::on_pushButton_export_to_BD_clicked()
             qDebug() << info[0] + info[3];
         }
     }
+}
+
+
+void MainWindow::on_pushButton_import_from_BD_clicked()
+{
+    filterWindow = new FilterWindow(this, filter_second_name, filter_first_name, filter_otchestvo, filter_file_name, filter_date,\
+                                    filter_counter_last_report);
+    filterWindow->show();
 }
 

@@ -29,6 +29,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         reportWindow.h reportWindow.cpp reportWindow.ui
 
         func_counter_symbol.cpp
+        filterWindow.h filterWindow.cpp filterWindow.ui
+
+
 
 
     )

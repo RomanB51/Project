@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "reportWindow.h"
+#include "filterWindow.h"
 
 #include <QMainWindow>
 #include <QStatusBar>
@@ -33,6 +34,15 @@ public:
     static QString Read_signs(int num_val);
 
 
+    static void set_filter_second_name(QString newVal);
+    static void set_filter_first_name(QString newVal);
+    static void set_filter_otchestvo(QString newVal);
+    static void set_filter_file_name(QString newVal);
+    static void set_filter_date(QString newVal);
+    static void set_filter_counter_last_report(QString newVal);
+
+
+
 private slots:
 
     void on_pushButton_ChooseFile_clicked();
@@ -53,6 +63,8 @@ private slots:
 
     void on_pushButton_export_to_BD_clicked();
 
+    void on_pushButton_import_from_BD_clicked();
+
 signals:
     void showPasswordWindow();
 
@@ -71,6 +83,8 @@ private:
     bool flag_admin_user;
 
     ReportWindow *reportWindow;
+    FilterWindow *filterWindow;
+
 
     std::map <QString, std::vector <std::vector<int>>> stroka_of_ReportWindow;
     std::map <QString, std::vector <QString>> stroka_of_MainWindow;
@@ -105,6 +119,9 @@ private:
     QLabel *name_label_for_statusbar;
     QLabel *ip_label_for_statusbar;
     QLabel *file_name_label_for_statusbar;
+
+
+    static QString filter_second_name, filter_first_name, filter_otchestvo, filter_file_name, filter_date, filter_counter_last_report;
 };
 
 #endif // MAINWINDOW_H
