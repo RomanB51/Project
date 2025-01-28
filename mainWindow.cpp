@@ -14,7 +14,7 @@
 #include <QMouseEvent>
 #include <vector>
 
-MainWindow::MainWindow(const QString &second_name, const QString &first_name, const QString &otchestvo, \
+MainWindow::MainWindow(const QString second_name, const QString first_name, const QString otchestvo, \
                        const QString ip_adress, const bool flag_admin_user, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
