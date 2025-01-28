@@ -30,7 +30,11 @@ FilterWindow::FilterWindow(QWidget *parent, QString second_name, QString first_n
     ui->lineEdit_First_name->setText(first_name);
     ui->lineEdit_Otchestvo->setText(otchestvo);
     ui->lineEdit_File_name->setText(file_name);
-    ui->dateEdit->setDate(QDate::fromString(date, "dd.MM.yyyy"));
+
+    if(date == "")
+        ui->dateEdit->setDate(QDate::currentDate());
+    else
+        ui->dateEdit->setDate(QDate::fromString(date, "dd.MM.yyyy"));
     ui->spinBox->setValue(counter_last_report.toInt());
 
     qDebug()<<"Окно фильтров создано";
@@ -77,6 +81,8 @@ bool FilterWindow::eventFilter(QObject *obj, QEvent *evt)
             if(keyEvent->key() == Qt::Key_Return){
                 QKeyEvent ke(QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier);
                 QCoreApplication::sendEvent(this, &ke);
+                if(ui->checkBox_Date->hasFocus() || ui->pushButton_CleanAll->hasFocus())
+                    QCoreApplication::sendEvent(this, &ke);
             }
             if(ui->pushButton_Find_reports->hasFocus()){
                 on_pushButton_Find_reports_clicked();
