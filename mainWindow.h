@@ -96,24 +96,24 @@ private:
 
 
     static const QString rus_small_letters[33];
-    std::vector<int> count_rus_small_letters = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> count_rus_small_letters = std::vector<int> (33, 0);
 
     const QString rus_big_letters[33] = {"А", "Б", "В", "Г", "Д", "Е", "Ё", "Ж", "З", "И", "Й", "К", "Л", "М", "Н", \
                                          "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я"};
-    std::vector<int> count_rus_big_letters = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> count_rus_big_letters = std::vector<int> (33, 0);
 
     static const QString eng_small_letters[26];
-    std::vector<int> count_eng_small_letters = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> count_eng_small_letters = std::vector<int> (26, 0);
 
     const QString eng_big_letters[26] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", \
                                          "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-    std::vector<int> count_eng_big_letters = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> count_eng_big_letters = std::vector<int> (26, 0);
 
     static const QString numbers[10];
-    std::vector<int> count_numbers = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> count_numbers = std::vector<int> (10, 0);
 
     static const QString signs[29];
-    std::vector<int> count_signs = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::vector<int> count_signs = std::vector<int> (29, 0);
 
 
     QLabel *name_label_for_statusbar;
