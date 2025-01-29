@@ -10,6 +10,7 @@
 #include <QAction>
 #include <QLineEdit>
 #include <QDir>
+#include <QTextStream>
 
 PasswordWindow::PasswordWindow(QWidget *parent)
     : QDialog(parent)
@@ -31,8 +32,6 @@ PasswordWindow::PasswordWindow(QWidget *parent)
 
     qApp->setWindowIcon(QIcon(":/Images/Icons/WindowIcon.jpg"));
 
-    qDebug() << "Окно пароля создано";
-
     QDir programmDir = QDir::current();
     programmDir.cdUp();
     programmDir.cdUp();
@@ -41,27 +40,37 @@ PasswordWindow::PasswordWindow(QWidget *parent)
     QFile file(file_path);
     if(file.open(QFile::ReadOnly | QFile::Text))
     {
-        read_data_about_DB(file);
+        Read_data_about_DB(file);
     }
-    else{
-        file.open(QFile::WriteOnly | QFile::Text);
-        QTextStream out(&file);
-        out << "Ip adress = 'insert here ip adress of your DB'\n"
-               "Username in DB = 'insert here username in your DB'\n"
-               "Name of DB = 'insert here name of your DB'\n"
-               "Name of table = 'insert here name of table'";
-        file.flush();
-        file.close();
-        QMessageBox::information(this, "Ошибка подключения", "Файл 'Configuration of DB' вероятно был удален.\
-                                                              Введите в нем необходимые данные и перезапустите приложение.");
-        qApp->quit();
-    }
+
+    qDebug() << "Окно пароля создано";
 }
 
 PasswordWindow::~PasswordWindow()
 {
     qDebug() << "Окно пароля уничтожено";
     delete ui;
+}
+
+void PasswordWindow::Read_data_about_DB(QFile &object)
+{
+    QTextStream in(&object);
+    QString symbol;
+    QString* ptr_symbol = &symbol;
+    int i = 0;
+
+
+    while(in.readLineInto(ptr_symbol, 1)){
+        if(*ptr_symbol == "'"){
+            in.readLineInto(ptr_symbol, 1);
+            while(*ptr_symbol != "'"){
+                data_about_DB[i] += *ptr_symbol;
+                in.readLineInto(ptr_symbol, 1);
+            }
+            i++;
+        }
+    }
+    object.close();
 }
 
 
@@ -147,26 +156,5 @@ void PasswordWindow::on_pushButton_Entry_clicked()
 void PasswordWindow::on_pushButton_Exit_clicked()
 {
     qApp->quit();
-}
-
-void PasswordWindow::read_data_about_DB(QFile &object)
-{
-    QTextStream in(&object);
-    QString symbol;
-    QString* ptr_symbol = &symbol;
-    int i = 0;
-
-
-    while(in.readLineInto(ptr_symbol, 1)){
-        if(*ptr_symbol == "'"){
-            in.readLineInto(ptr_symbol, 1);
-            while(*ptr_symbol != "'"){
-                data_about_DB[i] += *ptr_symbol;
-                in.readLineInto(ptr_symbol, 1);
-            }
-            i++;
-        }
-    }
-    object.close();
 }
 

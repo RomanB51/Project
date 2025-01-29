@@ -1,5 +1,5 @@
-﻿#include "passwordWindow.h"
-#include "main.h"
+﻿
+#include "myApplication.h"
 
 #include <QApplication>
 #include <QStyleFactory>
@@ -7,9 +7,8 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    MyApplication a(argc, argv);
     qApp->setStyle(QStyleFactory::create("Fusion"));
-    PasswordWindow w;
-    w.show();
-    return a.exec();
+
+    return a.RunApp();
 }

@@ -30,6 +30,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         func_counter_symbol.cpp
         filterWindow.h filterWindow.cpp filterWindow.ui
+        myApplication.h myApplication.cpp
 
 
 

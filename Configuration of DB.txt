@@ -1,4 +1,4 @@
-Ip adress = '197.168.0.105'
+Ip adress = '198.168.0.104'
 Username in DB = 'roman'
 Name of DB = 'My_DB'
 Name of table = 'Table'

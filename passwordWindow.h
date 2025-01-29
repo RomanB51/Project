@@ -22,7 +22,8 @@ public:
     PasswordWindow(QWidget *parent = nullptr);
     ~PasswordWindow();
 
-    void read_data_about_DB(QFile &object);
+    void Read_data_about_DB(QFile &object);
+
 
 private slots:
     void on_pushButton_Entry_clicked();
