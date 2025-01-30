@@ -8,20 +8,25 @@
 
 class MyApplication:public QApplication
 {
+    Q_OBJECT
 public:
     MyApplication(int &argc, char **argv);
 
     ~MyApplication();
 
-    bool Check_config_file();
+    int Check_config_file();
 
     int RunApp();
 
+    void Read_data_about_DB(QFile &object);
+
 private:
 
-    bool flag_startUp;
+    int flag_startUp;
 
     PasswordWindow *passwordWindow;
+
+    std::vector<QString> data_about_DB = {"", "", "", ""};
 };
 
 #endif // MYAPPLICATION_H

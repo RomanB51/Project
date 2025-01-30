@@ -19,10 +19,8 @@ class PasswordWindow : public QDialog
     Q_OBJECT
 
 public:
-    PasswordWindow(QWidget *parent = nullptr);
+    PasswordWindow(std::vector<QString> data_about_DB = {"", "", "", ""}, QWidget *parent  = nullptr);
     ~PasswordWindow();
-
-    void Read_data_about_DB(QFile &object);
 
 
 private slots:
@@ -46,7 +44,7 @@ private:
     bool flag_for_show_hide_password = 1;
     bool flag_admin_user = 0;
 
-    std::vector<QString> data_about_DB = {"", "", "", ""};
+    std::vector<QString> info_about_DB;
 
 };
 #endif // PASSWORDWINDOW_H

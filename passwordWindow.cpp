@@ -9,10 +9,8 @@
 #include <QEvent>
 #include <QAction>
 #include <QLineEdit>
-#include <QDir>
-#include <QTextStream>
 
-PasswordWindow::PasswordWindow(QWidget *parent)
+PasswordWindow::PasswordWindow(std::vector<QString> data_about_DB, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::PasswordWindow)
 {
@@ -32,16 +30,7 @@ PasswordWindow::PasswordWindow(QWidget *parent)
 
     qApp->setWindowIcon(QIcon(":/Images/Icons/WindowIcon.jpg"));
 
-    QDir programmDir = QDir::current();
-    programmDir.cdUp();
-    programmDir.cdUp();
-    QString file_path = programmDir.absoluteFilePath("Configuration of DB.txt");
-
-    QFile file(file_path);
-    if(file.open(QFile::ReadOnly | QFile::Text))
-    {
-        Read_data_about_DB(file);
-    }
+    this->info_about_DB = data_about_DB;
 
     qDebug() << "Окно пароля создано";
 }
@@ -50,27 +39,6 @@ PasswordWindow::~PasswordWindow()
 {
     qDebug() << "Окно пароля уничтожено";
     delete ui;
-}
-
-void PasswordWindow::Read_data_about_DB(QFile &object)
-{
-    QTextStream in(&object);
-    QString symbol;
-    QString* ptr_symbol = &symbol;
-    int i = 0;
-
-
-    while(in.readLineInto(ptr_symbol, 1)){
-        if(*ptr_symbol == "'"){
-            in.readLineInto(ptr_symbol, 1);
-            while(*ptr_symbol != "'"){
-                data_about_DB[i] += *ptr_symbol;
-                in.readLineInto(ptr_symbol, 1);
-            }
-            i++;
-        }
-    }
-    object.close();
 }
 
 
@@ -124,7 +92,7 @@ void PasswordWindow::on_pushButton_Entry_clicked()
         QString first_name = "Роман";
         QString second_name = "Бычков";
         QString otchestvo = "Евгеньевич";
-        QString ip_adress = data_about_DB[0];
+        QString ip_adress = info_about_DB[0];
         flag_admin_user = 0;
         mainWindow = new MainWindow(this, second_name, first_name, otchestvo, ip_adress, flag_admin_user);
         connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);
@@ -135,7 +103,7 @@ void PasswordWindow::on_pushButton_Entry_clicked()
         QString first_name = "Василий";
         QString second_name = "Вахрамеев";
         QString otchestvo = "Евгеньевич";
-        QString ip_adress = data_about_DB[0];
+        QString ip_adress = info_about_DB[0];
         flag_admin_user = 1;
         mainWindow = new MainWindow(this, second_name, first_name, otchestvo, ip_adress, flag_admin_user);
         connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);

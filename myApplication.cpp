@@ -3,10 +3,13 @@
 
 #include <QDir>
 #include <QMessageBox>
+#include <QTextStream>
 
-MyApplication::MyApplication(int &argc, char **argv):QApplication(argc, argv){
-    flag_startUp = Check_config_file();
-};
+MyApplication::MyApplication(int &argc, char **argv)
+    :QApplication(argc, argv)
+{
+    this->flag_startUp = Check_config_file();
+}
 
 MyApplication::~MyApplication()
 {
@@ -15,7 +18,7 @@ MyApplication::~MyApplication()
 }
 
 
-bool MyApplication::Check_config_file()
+int MyApplication::Check_config_file()
 {
     QDir programmDir = QDir::current();
     programmDir.cdUp();
@@ -25,6 +28,8 @@ bool MyApplication::Check_config_file()
     QFile file(file_path);
     if(file.open(QFile::ReadOnly | QFile::Text))
     {
+        Read_data_about_DB(file);
+        file.close();
         return 1;
     }
     else{
@@ -37,7 +42,7 @@ bool MyApplication::Check_config_file()
         file.flush();
         file.close();
         QMessageBox *msg = new QMessageBox();
-        msg->setText("Файл 'Configuration of DB' вероятно был удален.\
+        msg->setText("Файл 'Configuration of DB' вероятно был удален.\n\
                     Введите в нем необходимые данные и перезапустите приложение.");
         msg->setWindowTitle("Ошибка подключения");
         msg->exec();
@@ -48,11 +53,32 @@ bool MyApplication::Check_config_file()
 int MyApplication::RunApp()
 {
     if(flag_startUp){
-        passwordWindow = new PasswordWindow();
+        passwordWindow = new PasswordWindow(data_about_DB);
         passwordWindow->show();
         return exec();
     }
     else{
         return 1;
     }
+}
+
+void MyApplication::Read_data_about_DB(QFile &object)
+{
+    QTextStream in(&object);
+    QString symbol;
+    QString* ptr_symbol = &symbol;
+    int i = 0;
+
+
+    while(in.readLineInto(ptr_symbol, 1)){
+        if(*ptr_symbol == "'"){
+            in.readLineInto(ptr_symbol, 1);
+            while(*ptr_symbol != "'"){
+                data_about_DB[i] += *ptr_symbol;
+                in.readLineInto(ptr_symbol, 1);
+            }
+            i++;
+        }
+    }
+    object.close();
 }
