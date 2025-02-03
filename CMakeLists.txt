@@ -12,6 +12,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+find_library(PQXX_LIB pqxx)
+find_library(PQ_LIB pq)
+
 set(PROJECT_SOURCES
         passwordWindow.cpp
         passwordWindow.h
@@ -55,6 +58,7 @@ else()
 endif()
 
 target_link_libraries(Processing PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(Processing PRIVATE ${PQXX_LIB} ${PQ_LIB})
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

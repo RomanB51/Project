@@ -1,4 +1,5 @@
-Ip adress = '198.168.0.104'
-Username in DB = 'roman'
 Name of DB = 'My_DB'
-Name of table = 'Table'
+Username in DB = 'roma'
+Password of user = '12345'
+Ip adress = '198.168.0.104'
+Port = '2024'

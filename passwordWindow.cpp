@@ -9,12 +9,16 @@
 #include <QEvent>
 #include <QAction>
 #include <QLineEdit>
+#include <pqxx/pqxx>
 
-PasswordWindow::PasswordWindow(std::vector<QString> data_about_DB, QWidget *parent)
+
+PasswordWindow::PasswordWindow(std::vector<QString> data_about_DB, pqxx::connection *conn, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::PasswordWindow)
 {
     ui->setupUi(this);
+
+    conn_for_password = conn;
 
     ui->lineEdit_login->installEventFilter(this);
     ui->lineEdit_password->installEventFilter(this);
@@ -87,37 +91,42 @@ void PasswordWindow::on_pushButton_Entry_clicked()
     QString password = ui->lineEdit_password->text();
 
 
-    if(login == "" && password == ""){
-        this->hide();
-        QString first_name = "Роман";
-        QString second_name = "Бычков";
-        QString otchestvo = "Евгеньевич";
-        QString ip_adress = info_about_DB[0];
-        flag_admin_user = 0;
-        mainWindow = new MainWindow(this, second_name, first_name, otchestvo, ip_adress, flag_admin_user);
-        connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);
-        mainWindow->show();
-    }
-    else if(login == "1" && password == "1"){
-        this->hide();
-        QString first_name = "Василий";
-        QString second_name = "Вахрамеев";
-        QString otchestvo = "Евгеньевич";
-        QString ip_adress = info_about_DB[0];
-        flag_admin_user = 1;
-        mainWindow = new MainWindow(this, second_name, first_name, otchestvo, ip_adress, flag_admin_user);
-        connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);
-        mainWindow->show();
+    pqxx::work transaction(*conn_for_password);
+    pqxx::result res = transaction.exec("select id, positions, second_name, first_name, third_name from staff where login LIKE '" + login.toStdString() + "' and password LIKE '" + password.toStdString() + "';");
+    transaction.commit();
+    if(!res.empty()){
+        for (pqxx::result::const_iterator row = res.begin(); row != res.end(); ++row){
+            this->id_staff = QString::fromStdString(row[0].as<std::string>());
+            this->position = QString::fromStdString(row[1].as<std::string>());
+            this->second_name = QString::fromStdString(row[2].as<std::string>());
+            this->first_name = QString::fromStdString(row[3].as<std::string>());
+            this->otchestvo = QString::fromStdString(row[4].as<std::string>());
         }
-        else{
+        if(position == "Ведущий инженер")
+            flag_admin_user = 1;
+        else
+            flag_admin_user = 0;
+
+
+        ip_adress = info_about_DB[3];
+        this->hide();
+        mainWindow = new MainWindow(this, this->second_name, this->first_name, this->otchestvo, this->ip_adress,\
+                                    this->flag_admin_user, this->id_staff, conn_for_password);
+        connect(mainWindow, &MainWindow::showPasswordWindow, this, &PasswordWindow::ShowMe);
+        mainWindow->show();
+
+        ui->lineEdit_login->clear();
+        ui->lineEdit_password->clear();
+        ui->lineEdit_login->setFocus();
+    }
+    else{
             QMessageBox::information(this, "Ошибка авторизации", "Логин или пароль введены неверно");
             flag_for_focus_enter_after_QMessage = 0;
             ui->lineEdit_password->setFocus();
             ui->lineEdit_password->clear();
-        }
-        ui->lineEdit_login->clear();
-        ui->lineEdit_password->clear();
-        ui->lineEdit_login->setFocus();
+    }
+
+
 }
 
 

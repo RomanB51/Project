@@ -5,6 +5,7 @@
 #include <QAction>
 #include <QTextStream>
 #include <QFile>
+#include <pqxx/pqxx>
 
 #include "mainWindow.h"
 
@@ -19,7 +20,8 @@ class PasswordWindow : public QDialog
     Q_OBJECT
 
 public:
-    PasswordWindow(std::vector<QString> data_about_DB = {"", "", "", ""}, QWidget *parent  = nullptr);
+    PasswordWindow(std::vector<QString> data_about_DB = {"", "", "", "", ""}, pqxx::connection *conn = new pqxx::connection(),\
+                    QWidget *parent  = nullptr);
     ~PasswordWindow();
 
 
@@ -45,6 +47,15 @@ private:
     bool flag_admin_user = 0;
 
     std::vector<QString> info_about_DB;
+
+    pqxx::connection *conn_for_password;
+
+    QString id_staff;
+    QString position;
+    QString first_name;
+    QString second_name;
+    QString otchestvo;
+    QString ip_adress;
 
 };
 #endif // PASSWORDWINDOW_H

@@ -13,9 +13,11 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <vector>
+#include <pqxx/pqxx>
 
 MainWindow::MainWindow(QWidget *parent, const QString &second_name, const QString &first_name, const QString &otchestvo, \
-                       const QString ip_adress, const bool flag_admin_user)
+                       const QString ip_adress, const bool flag_admin_user, const QString id_staff,\
+                        pqxx::connection *conn)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -23,11 +25,14 @@ MainWindow::MainWindow(QWidget *parent, const QString &second_name, const QStrin
 
     this->setAttribute(Qt::WA_DeleteOnClose);
 
+    this->conn_for_mainwindow = conn;
+
     this->first_name = first_name;
     this->second_name = second_name;
     this->otchestvo = otchestvo;
     this->ip_adress = ip_adress;
     this->flag_admin_user = flag_admin_user;
+    this->id_staff = id_staff;
 
 
     ui->tableWidget->setColumnCount(7);
@@ -104,8 +109,8 @@ void MainWindow::set_filter_counter_last_report(QString newVal){filter_counter_l
 
 void MainWindow::on_pushButton_ChooseFile_clicked()
 {
-    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/My_project/", "Text File (*.txt)");
-    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
+    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/My_project/", "Text File (*.txt)");
+    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
 
     QFile file(file_path);
     if(!file.open(QFile::ReadOnly | QFile::Text)){
@@ -117,7 +122,7 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
         QFileInfo file_info(file_path);
         QString file_name = file_info.baseName();
         QString date = QDate::currentDate().toString("dd.MM.yyyy");
-        QString time = QTime::currentTime().toString("hh : mm : ss");
+        QString time = QTime::currentTime().toString("hh:mm:ss");
         QString second_name = this->second_name;
         QString first_name = this->first_name;
         QString otchestvo = this->otchestvo;
@@ -136,7 +141,7 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
         }
 
         stroka_of_ReportWindow[file_name + time] = {count_rus_small_letters, count_rus_big_letters, count_signs,\
-                                                    count_numbers, count_eng_small_letters, count_eng_big_letters};
+                                                    count_numbers, count_eng_small_letters, count_eng_big_letters, dop_info_about_text};
         func_counter_symbol(file, file_name + time);
 
         file.close();
@@ -282,14 +287,29 @@ void MainWindow::on_pushButton_day_night_theme_clicked()
 
 
 
-
+std::vector<int> operator +(const std::vector<int> &a, const std::vector<int> &b){
+    std::vector<int> sum;
+    sum.reserve(33);
+    for(int i = 0; i != a.size(); ++i){
+        sum.push_back(a[i] + b[i]);
+    }
+    return sum;
+}
 void MainWindow::on_pushButton_export_to_BD_clicked()
 {
-    for(const auto& [key, info] : stroka_of_MainWindow){
+    pqxx::work transaction(*conn_for_mainwindow);
+    for(auto& [key, info] : stroka_of_MainWindow){
         if(info[7] == "0"){
-            qDebug() << info[0] + info[3];
+            transaction.exec("INSERT INTO report(staffer, file_name, file_path, date, time, second_name, first_name, otchestvo, rus_letters)"
+            " VALUES "
+            "(" + id_staff.toStdString() + ", '" + info[0].toStdString() + "', '" + info[1].toStdString() + "', to_date('" +\
+            info[2].toStdString() + "', 'DD.MM.YYYY'), '" + info[3].toStdString() + "', '" + info[4].toStdString() + "', '" + info[5].toStdString() +\
+            "', '" + info[6].toStdString() + "', '" + int_to_str(stroka_of_ReportWindow[key][0] + stroka_of_ReportWindow[key][1]) + "')");
+            info[7] = "1";
+            qDebug() << "Загружено";
         }
     }
+    transaction.commit();
 }
 
 
@@ -298,5 +318,11 @@ void MainWindow::on_pushButton_import_from_BD_clicked()
     filterWindow = new FilterWindow(this, filter_second_name, filter_first_name, filter_otchestvo, filter_file_name, filter_date,\
                                     filter_counter_last_report);
     filterWindow->show();
+}
+
+
+std::string MainWindow::int_to_str(std::vector<int> arr){
+        return accumulate(std::next(std::begin(arr)), std::end(arr), std::to_string(arr[0]),\
+                          [](std::string(a), int b){return a + "-" + std::to_string(b);});
 }
 

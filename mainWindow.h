@@ -11,6 +11,7 @@
 #include <QLabel>
 #include <vector>
 #include <QFile>
+#include <pqxx/pqxx>
 
 namespace Ui {
 class MainWindow;
@@ -21,12 +22,14 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr, const QString& second_name = "", const QString& first_name = "",\
-                        const QString& otchestvo = "", const QString ip_adress = "Связь с базой данных не установлена",\
-                        const bool flag_admin_user = 0);
+    explicit MainWindow(QWidget *parent = nullptr, const QString& second_name = "", const QString& first_name = "", \
+                        const QString& otchestvo = "", const QString ip_adress = "Связь с базой данных не установлена", \
+                        const bool flag_admin_user = 0, const QString id_staff = "", pqxx::connection *conn  = new pqxx::connection());
     ~MainWindow();
 
     void func_counter_symbol(QFile &object, const QString &id_in_map);
+    std::string int_to_str(std::vector<int> arr);
+
 
     static QString Read_rus_small_letters(int num_val);
     static QString Read_eng_small_letters(int num_val);
@@ -78,9 +81,12 @@ private:
     QString second_name;
     QString otchestvo;
     QString ip_adress;
+    QString id_staff;
+
 
     bool shine_dark_mode = 0;
     bool flag_admin_user;
+
 
     ReportWindow *reportWindow;
     FilterWindow *filterWindow;
@@ -88,11 +94,21 @@ private:
 
     std::map <QString, std::vector <std::vector<int>>> stroka_of_ReportWindow;
     std::map <QString, std::vector <QString>> stroka_of_MainWindow;
-
     QList<QString> column_name_mainWindow = {"Имя файла", "Путь к файлу", "Дата", "Время", "Фамилия", "Имя", "Отчество"};
+
 
     int counter_row = 0;
     int counter_of_troitochie = 0;
+    int letters = 0;
+    int paragraph = 0;
+    int proposal = 0;
+    int words = 0;
+    int number = 0;
+    int glasn = 0;
+    int soglasn = 0;
+    std::vector<int> dop_info_about_text = {counter_of_troitochie, letters, paragraph, proposal, words, number, glasn, soglasn};
+    std::vector<int> sum_rus_letters;
+    std::vector<int> sum_eng_letters;
 
 
     static const QString rus_small_letters[33];
@@ -116,12 +132,16 @@ private:
     std::vector<int> count_signs = std::vector<int> (29, 0);
 
 
+
     QLabel *name_label_for_statusbar;
     QLabel *ip_label_for_statusbar;
     QLabel *file_name_label_for_statusbar;
 
 
     static QString filter_second_name, filter_first_name, filter_otchestvo, filter_file_name, filter_date, filter_counter_last_report;
+
+
+    pqxx::connection *conn_for_mainwindow;
 };
 
 #endif // MAINWINDOW_H

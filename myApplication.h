@@ -5,6 +5,7 @@
 
 #include <QApplication>
 #include <QDir>
+#include <pqxx/pqxx>
 
 class MyApplication:public QApplication
 {
@@ -14,7 +15,9 @@ public:
 
     ~MyApplication();
 
-    int Check_config_file();
+    bool Check_config_file();
+
+    bool Check_connection_DB();
 
     int RunApp();
 
@@ -22,11 +25,15 @@ public:
 
 private:
 
-    int flag_startUp;
+    bool flag_config_file = 0;
+
+    bool flag_connection = 0;
 
     PasswordWindow *passwordWindow;
 
-    std::vector<QString> data_about_DB = {"", "", "", ""};
+    std::vector<QString> data_about_DB = {"", "", "", "", ""};
+
+    pqxx::connection *conn;
 };
 
 #endif // MYAPPLICATION_H
