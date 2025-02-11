@@ -13,9 +13,9 @@ class ReportWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit ReportWindow(QMainWindow *parent = nullptr, const QString& second_name = "", const QString& first_name = "",\
-                        const QString& otchestvo = "", const QString& ip_adress = "Связь в базой данных отсутствует", \
-                        const QString& file_name = "", const std::vector<std::vector<int> > count_of_symbol = {}, const int counter_of_troitochie = 0);
+    explicit ReportWindow(QMainWindow *parent = nullptr, const QString& second_name = "", const QString& first_name = "", \
+                            const QString& otchestvo = "", const QString& ip_adress = "Связь в базой данных отсутствует", \
+                            const QString& file_name = "", const std::vector<std::vector<int> > count_of_symbol = {});
     ~ReportWindow();
 
 private slots:

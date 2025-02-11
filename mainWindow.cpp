@@ -109,17 +109,16 @@ void MainWindow::set_filter_counter_last_report(QString newVal){filter_counter_l
 
 void MainWindow::on_pushButton_ChooseFile_clicked()
 {
-    //QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "D:/C++/My_project/", "Text File (*.txt)");
-    QString file_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", "/home/roman/MyProject/", "Text File (*.txt)");
+    last_path = QFileDialog::getOpenFileName(this, "Окно выбора файлов", last_path, "Text File (*.txt)");
 
-    QFile file(file_path);
+    QFile file(last_path);
     if(!file.open(QFile::ReadOnly | QFile::Text)){
         QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл");
     }
     else{
         counter_row = ui->tableWidget->rowCount();
         ui->tableWidget->insertRow(counter_row);
-        QFileInfo file_info(file_path);
+        QFileInfo file_info(last_path);
         QString file_name = file_info.baseName();
         QString date = QDate::currentDate().toString("dd.MM.yyyy");
         QString time = QTime::currentTime().toString("hh:mm:ss");
@@ -127,14 +126,14 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
         QString first_name = this->first_name;
         QString otchestvo = this->otchestvo;
         QString status_in_DB = "0";
-        stroka_of_MainWindow[file_name + time] = {file_name, file_path, date, time, second_name, first_name, otchestvo, status_in_DB};
+        stroka_of_MainWindow[file_name + time] = {file_name, last_path, date, time, second_name, first_name, otchestvo, status_in_DB};
 
 
-        for(int i = 0; i != ui->tableWidget->columnCount(); i++){
+        for(int i = 0; i != ui->tableWidget->columnCount(); ++i){
             QTableWidgetItem *column = new QTableWidgetItem(stroka_of_MainWindow[file_name + time][i]);
             if(!flag_admin_user)
                 column->setFlags(column->flags() &= ~Qt::ItemIsEditable);
-            column->setBackground(Qt::red);
+            column->setBackground(Qt::darkRed);
             column->setToolTip(stroka_of_MainWindow[file_name + time][i]);
             column->setTextAlignment(Qt::AlignCenter);
             ui->tableWidget->setItem(counter_row, i, column);
@@ -243,7 +242,7 @@ void MainWindow::on_pushButton_Report_clicked()
         QString name_file_in_map = file_name_row + time_row;
 
         reportWindow = new ReportWindow(this, this->second_name, this->first_name, this->otchestvo, this->ip_adress, file_name_row,\
-                                        stroka_of_ReportWindow[name_file_in_map], counter_of_troitochie);
+                                        stroka_of_ReportWindow[name_file_in_map]);
 
         connect(reportWindow, &ReportWindow::showMainTable, this, &MainWindow::ShowMyself);
         reportWindow->show();
@@ -287,29 +286,46 @@ void MainWindow::on_pushButton_day_night_theme_clicked()
 
 
 
-std::vector<int> operator +(const std::vector<int> &a, const std::vector<int> &b){
-    std::vector<int> sum;
-    sum.reserve(33);
-    for(int i = 0; i != a.size(); ++i){
-        sum.push_back(a[i] + b[i]);
-    }
-    return sum;
-}
 void MainWindow::on_pushButton_export_to_BD_clicked()
 {
     pqxx::work transaction(*conn_for_mainwindow);
     for(auto& [key, info] : stroka_of_MainWindow){
         if(info[7] == "0"){
-            transaction.exec("INSERT INTO report(staffer, file_name, file_path, date, time, second_name, first_name, otchestvo, rus_letters)"
-            " VALUES "
+            transaction.exec("INSERT INTO report(staffer, file_name, file_path, date, time, second_name, first_name, otchestvo, rus_letters, eng_letters,"
+            "numbers, symbols, troetochie, letters, paragraph, proposal, words, number, glasn, soglasn) VALUES "
             "(" + id_staff.toStdString() + ", '" + info[0].toStdString() + "', '" + info[1].toStdString() + "', to_date('" +\
             info[2].toStdString() + "', 'DD.MM.YYYY'), '" + info[3].toStdString() + "', '" + info[4].toStdString() + "', '" + info[5].toStdString() +\
-            "', '" + info[6].toStdString() + "', '" + int_to_str(stroka_of_ReportWindow[key][0] + stroka_of_ReportWindow[key][1]) + "')");
+            "', '" + info[6].toStdString() + "', '" + int_to_str(sum_rus_letters) + "', '" + int_to_str(sum_eng_letters) + \
+            "', '" + int_to_str(stroka_of_ReportWindow[key][3]) + "', '" + int_to_str(stroka_of_ReportWindow[key][2]) + "', " + \
+            std::to_string(stroka_of_ReportWindow[key][6][0]) + ", " + std::to_string(stroka_of_ReportWindow[key][6][1]) + ", " +\
+            std::to_string(stroka_of_ReportWindow[key][6][2]) + ", " + std::to_string(stroka_of_ReportWindow[key][6][3]) + ", " + \
+            std::to_string(stroka_of_ReportWindow[key][6][4]) + ", " + std::to_string(stroka_of_ReportWindow[key][6][5]) + ", " +\
+            std::to_string(stroka_of_ReportWindow[key][6][6]) + ", " + std::to_string(stroka_of_ReportWindow[key][6][7]) + ")");
             info[7] = "1";
             qDebug() << "Загружено";
         }
     }
     transaction.commit();
+    int i = 0;
+    while(i != ui->tableWidget->rowCount()){
+        if(ui->tableWidget->item(i, 0)->background().color() == Qt::darkRed){
+            ui->tableWidget->item(i, 0)->setBackground(Qt::darkGreen);
+            ui->tableWidget->item(i, 0)->setFlags(ui->tableWidget->item(i, 0)->flags() &= ~Qt::ItemIsEditable);
+            ui->tableWidget->item(i, 1)->setBackground(Qt::darkGreen);
+            ui->tableWidget->item(i, 1)->setFlags(ui->tableWidget->item(i, 1)->flags() &= ~Qt::ItemIsEditable);
+            ui->tableWidget->item(i, 2)->setBackground(Qt::darkGreen);
+            ui->tableWidget->item(i, 2)->setFlags(ui->tableWidget->item(i, 2)->flags() &= ~Qt::ItemIsEditable);
+            ui->tableWidget->item(i, 3)->setBackground(Qt::darkGreen);
+            ui->tableWidget->item(i, 3)->setFlags(ui->tableWidget->item(i, 3)->flags() &= ~Qt::ItemIsEditable);
+            ui->tableWidget->item(i, 4)->setBackground(Qt::darkGreen);
+            ui->tableWidget->item(i, 4)->setFlags(ui->tableWidget->item(i, 4)->flags() &= ~Qt::ItemIsEditable);
+            ui->tableWidget->item(i, 5)->setBackground(Qt::darkGreen);
+            ui->tableWidget->item(i, 5)->setFlags(ui->tableWidget->item(i, 5)->flags() &= ~Qt::ItemIsEditable);
+            ui->tableWidget->item(i, 6)->setBackground(Qt::darkGreen);
+            ui->tableWidget->item(i, 6)->setFlags(ui->tableWidget->item(i, 6)->flags() &= ~Qt::ItemIsEditable);
+        }
+        ++i;
+    }
 }
 
 
@@ -318,6 +334,95 @@ void MainWindow::on_pushButton_import_from_BD_clicked()
     filterWindow = new FilterWindow(this, filter_second_name, filter_first_name, filter_otchestvo, filter_file_name, filter_date,\
                                     filter_counter_last_report);
     filterWindow->show();
+    connect(filterWindow, &FilterWindow::showDate, this, &MainWindow::ShowDateFromDB);
+}
+
+void MainWindow::ShowDateFromDB()
+{
+    if(filter_second_name == "" && filter_first_name == "" && filter_otchestvo == "" && filter_file_name == "" && filter_date == "" &&\
+                                                                                                            filter_counter_last_report == ""){
+        QMessageBox::warning(this, "Ошибка", "Выберите хотя бы один фильтр");
+    }
+    else{
+        pqxx::work transaction(*conn_for_mainwindow);
+
+        std::string first_part_of_request = "select file_name, file_path, date, time, second_name, first_name, otchestvo, rus_letters, eng_letters, "
+                                            "numbers, symbols, troetochie, letters, paragraph, proposal, words, number, glasn, soglasn from report where";
+
+        std::string second_part_of_request;
+        second_part_of_request.reserve(100);
+        if(filter_second_name != ""){
+            second_part_of_request += " second_name LIKE '" + filter_second_name.toStdString() + "' and";
+        }
+        if(filter_first_name != ""){
+            second_part_of_request += " first_name LIKE '" + filter_first_name.toStdString() + "' and";
+        }
+        if(filter_otchestvo != ""){
+            second_part_of_request += " otchestvo LIKE '" + filter_otchestvo.toStdString() + "' and";
+        }
+        if(filter_file_name != ""){
+            second_part_of_request += " file_name LIKE '" + filter_file_name.toStdString() + "' and";
+        }
+        if(filter_date != ""){
+            QDate date = QDate::fromString(filter_date, "dd.MM.yyyy");
+            QString qstr_date = date.toString("yyyy-MM-dd");
+
+            second_part_of_request += " date::text LIKE '" + qstr_date.toStdString() + "' and";
+        }
+        second_part_of_request.erase(second_part_of_request.size() - 4);
+
+        if(filter_counter_last_report != "0"){
+             second_part_of_request += " LIMIT " + filter_counter_last_report.toStdString();
+        }
+        second_part_of_request.push_back(';');
+        qDebug() << "Check: " << second_part_of_request << '\n';
+
+        std::string total_request = first_part_of_request + second_part_of_request;
+        qDebug() << "Check total:  " << total_request << '\n';
+
+
+
+
+
+        pqxx::result res = transaction.exec(total_request);
+        if(!res.empty()){
+            for (pqxx::result::const_iterator row = res.begin(); row != res.end(); ++row){
+                QString key = QString::fromStdString(row[0].as<std::string>()) + QString::fromStdString(row[3].as<std::string>());
+                if(stroka_of_MainWindow.find(key) == stroka_of_MainWindow.end()){
+
+                    stroka_of_MainWindow[key] = {QString::fromStdString(row[0].as<std::string>()), QString::fromStdString(row[1].as<std::string>()),
+                                                QString::fromStdString(row[2].as<std::string>()), QString::fromStdString(row[3].as<std::string>()),
+                                                QString::fromStdString(row[4].as<std::string>()), QString::fromStdString(row[5].as<std::string>()),
+                                                QString::fromStdString(row[6].as<std::string>()), "1"};
+
+                    std::vector<int> dop_info = {row[11].as<int>(), row[12].as<int>(), row[13].as<int>(), row[14].as<int>(), row[15].as<int>(),
+                                                row[16].as<int>(), row[17].as<int>(), row[18].as<int>()};
+
+                    stroka_of_ReportWindow[key] = {str_to_int(row[7].as<std::string>()), str_to_int(row[8].as<std::string>()),
+                                                    str_to_int(row[9].as<std::string>()), str_to_int(row[10].as<std::string>()),
+                                                    dop_info};
+
+
+                    counter_row = ui->tableWidget->rowCount();
+                    ui->tableWidget->insertRow(counter_row);
+                    for(int i = 0; i != ui->tableWidget->columnCount(); ++i){
+                        QTableWidgetItem *column = new QTableWidgetItem(stroka_of_MainWindow[key][i]);
+                        column->setFlags(column->flags() &= ~Qt::ItemIsEditable);
+                        column->setBackground(Qt::darkGreen);
+                        column->setToolTip(stroka_of_MainWindow[key][i]);
+                        column->setTextAlignment(Qt::AlignCenter);
+                        ui->tableWidget->setItem(counter_row, i, column);
+                    }
+                }
+            }
+        }
+        else{
+            QMessageBox::warning(this, "Отчеты не найдены", "Данные с указанными фильтрами не найдены!");
+        }
+        transaction.commit();
+
+        qDebug() << "Close";
+    }
 }
 
 
@@ -326,3 +431,20 @@ std::string MainWindow::int_to_str(std::vector<int> arr){
                           [](std::string(a), int b){return a + "-" + std::to_string(b);});
 }
 
+std::vector<int> MainWindow::str_to_int(std::string str){
+    std::string num;
+    std::vector<int> vec;
+    vec.reserve(33);
+
+    for(int j = 0; j != str.size(); ++j){
+        if(str[j] != '-'){
+            num += str[j];
+        }
+        else{
+            vec.push_back(std::stoi(num));
+            num.clear();
+        }
+    }
+    vec.push_back(std::stoi(num));
+    return vec;
+}

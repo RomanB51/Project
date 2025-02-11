@@ -29,6 +29,7 @@ public:
 
     void func_counter_symbol(QFile &object, const QString &id_in_map);
     std::string int_to_str(std::vector<int> arr);
+    std::vector<int> str_to_int(std::string str);
 
 
     static QString Read_rus_small_letters(int num_val);
@@ -73,6 +74,7 @@ signals:
 
 public slots:
     void ShowMyself();
+    void ShowDateFromDB();
 
 private:
     Ui::MainWindow *ui;
@@ -82,6 +84,9 @@ private:
     QString otchestvo;
     QString ip_adress;
     QString id_staff;
+
+
+    QString last_path;
 
 
     bool shine_dark_mode = 0;

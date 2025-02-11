@@ -52,8 +52,14 @@ void FilterWindow::on_pushButton_Find_reports_clicked()
     MainWindow::set_filter_first_name(ui->lineEdit_First_name->text());
     MainWindow::set_filter_otchestvo(ui->lineEdit_Otchestvo->text());
     MainWindow::set_filter_file_name(ui->lineEdit_File_name->text());
-    MainWindow::set_filter_date(ui->dateEdit->text());
+
+    if(ui->checkBox_Date->isChecked())
+        MainWindow::set_filter_date(ui->dateEdit->text());
+    else
+        MainWindow::set_filter_date("");
+
     MainWindow::set_filter_counter_last_report(ui->spinBox->text());
+    emit showDate();
     this->close();
 }
 

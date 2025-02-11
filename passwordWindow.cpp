@@ -41,6 +41,7 @@ PasswordWindow::PasswordWindow(std::vector<QString> data_about_DB, pqxx::connect
 
 PasswordWindow::~PasswordWindow()
 {
+    conn_for_password->close();
     qDebug() << "Окно пароля уничтожено";
     delete ui;
 }

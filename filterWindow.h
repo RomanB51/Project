@@ -18,6 +18,9 @@ public:
                             QString file_name = "", QString date = "", QString counter_last_report = "");
     ~FilterWindow();
 
+signals:
+    void showDate();
+
 private slots:
     void on_pushButton_Find_reports_clicked();
 
