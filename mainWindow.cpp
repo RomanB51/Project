@@ -139,8 +139,8 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
             ui->tableWidget->setItem(counter_row, i, column);
         }
 
-        stroka_of_ReportWindow[file_name + time] = {count_rus_small_letters, count_rus_big_letters, count_signs,\
-                                                    count_numbers, count_eng_small_letters, count_eng_big_letters, dop_info_about_text};
+        stroka_of_ReportWindow[file_name + time] = {sum_rus_letters, sum_eng_letters, count_numbers, count_signs, dop_info_about_text};
+
         func_counter_symbol(file, file_name + time);
 
         file.close();
@@ -295,12 +295,12 @@ void MainWindow::on_pushButton_export_to_BD_clicked()
             "numbers, symbols, troetochie, letters, paragraph, proposal, words, number, glasn, soglasn) VALUES "
             "(" + id_staff.toStdString() + ", '" + info[0].toStdString() + "', '" + info[1].toStdString() + "', to_date('" +\
             info[2].toStdString() + "', 'DD.MM.YYYY'), '" + info[3].toStdString() + "', '" + info[4].toStdString() + "', '" + info[5].toStdString() +\
-            "', '" + info[6].toStdString() + "', '" + int_to_str(sum_rus_letters) + "', '" + int_to_str(sum_eng_letters) + \
-            "', '" + int_to_str(stroka_of_ReportWindow[key][3]) + "', '" + int_to_str(stroka_of_ReportWindow[key][2]) + "', " + \
-            std::to_string(stroka_of_ReportWindow[key][6][0]) + ", " + std::to_string(stroka_of_ReportWindow[key][6][1]) + ", " +\
-            std::to_string(stroka_of_ReportWindow[key][6][2]) + ", " + std::to_string(stroka_of_ReportWindow[key][6][3]) + ", " + \
-            std::to_string(stroka_of_ReportWindow[key][6][4]) + ", " + std::to_string(stroka_of_ReportWindow[key][6][5]) + ", " +\
-            std::to_string(stroka_of_ReportWindow[key][6][6]) + ", " + std::to_string(stroka_of_ReportWindow[key][6][7]) + ")");
+            "', '" + info[6].toStdString() + "', '" + int_to_str(stroka_of_ReportWindow[key][0]) + "', '" + int_to_str(stroka_of_ReportWindow[key][1]) + \
+            "', '" + int_to_str(stroka_of_ReportWindow[key][2]) + "', '" + int_to_str(stroka_of_ReportWindow[key][3]) + "', " + \
+            std::to_string(stroka_of_ReportWindow[key][4][0]) + ", " + std::to_string(stroka_of_ReportWindow[key][4][1]) + ", " +\
+            std::to_string(stroka_of_ReportWindow[key][4][2]) + ", " + std::to_string(stroka_of_ReportWindow[key][4][3]) + ", " + \
+            std::to_string(stroka_of_ReportWindow[key][4][4]) + ", " + std::to_string(stroka_of_ReportWindow[key][4][5]) + ", " +\
+            std::to_string(stroka_of_ReportWindow[key][4][6]) + ", " + std::to_string(stroka_of_ReportWindow[key][4][7]) + ")");
             info[7] = "1";
             qDebug() << "Загружено";
         }
