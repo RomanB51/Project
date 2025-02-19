@@ -14,6 +14,7 @@
 #include <QMouseEvent>
 #include <vector>
 #include <pqxx/pqxx>
+#include <thread>
 
 MainWindow::MainWindow(QWidget *parent, const QString &second_name, const QString &first_name, const QString &otchestvo, \
                        const QString ip_adress, const bool flag_admin_user, const QString id_staff,\
