@@ -7,7 +7,7 @@
 <!--Установка-->
 ## Клонирование репозитория
 
-```git clone https://github.com/OkulusDev/Oxygen.git```
+```git clone https://github.com/RomanB51/Project.git```
 
 <!--Пользовательская документация-->
 ## Документация
