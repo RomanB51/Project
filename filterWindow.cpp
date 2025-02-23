@@ -48,17 +48,17 @@ FilterWindow::~FilterWindow()
 
 void FilterWindow::on_pushButton_Find_reports_clicked()
 {
-    MainWindow::set_filter_second_name(ui->lineEdit_Second_name->text());
-    MainWindow::set_filter_first_name(ui->lineEdit_First_name->text());
-    MainWindow::set_filter_otchestvo(ui->lineEdit_Otchestvo->text());
-    MainWindow::set_filter_file_name(ui->lineEdit_File_name->text());
+    MainWindow::Set_filter_second_name(ui->lineEdit_Second_name->text());
+    MainWindow::Set_filter_first_name(ui->lineEdit_First_name->text());
+    MainWindow::Set_filter_otchestvo(ui->lineEdit_Otchestvo->text());
+    MainWindow::Set_filter_file_name(ui->lineEdit_File_name->text());
 
     if(ui->checkBox_Date->isChecked())
-        MainWindow::set_filter_date(ui->dateEdit->text());
+        MainWindow::Set_filter_date(ui->dateEdit->text());
     else
-        MainWindow::set_filter_date("");
+        MainWindow::Set_filter_date("");
 
-    MainWindow::set_filter_counter_last_report(ui->spinBox->text());
+    MainWindow::Set_filter_counter_last_report(ui->spinBox->text());
     emit showDate();
     this->close();
 }

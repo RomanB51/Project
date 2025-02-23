@@ -33,7 +33,7 @@ private:
 
     std::vector<QString> data_about_DB = {"", "", "", "", ""};
 
-    pqxx::connection *conn;
+    pqxx::connection *conn = nullptr;
 };
 
 #endif // MYAPPLICATION_H

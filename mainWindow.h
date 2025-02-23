@@ -27,9 +27,9 @@ public:
                         const bool flag_admin_user = 0, const QString id_staff = "", pqxx::connection *conn  = new pqxx::connection());
     ~MainWindow();
 
-    void func_counter_symbol(QFile &object, const QString &id_in_map);
-    std::string int_to_str(std::vector<int> arr);
-    std::vector<int> str_to_int(std::string str);
+    void Func_counter_symbol(QFile &object, const QString &id_in_map);
+    std::string Int_to_str(std::vector<int> arr);
+    std::vector<int> Str_to_int(std::string str);
 
 
     static QString Read_rus_small_letters(int num_val);
@@ -38,12 +38,12 @@ public:
     static QString Read_signs(int num_val);
 
 
-    static void set_filter_second_name(QString newVal);
-    static void set_filter_first_name(QString newVal);
-    static void set_filter_otchestvo(QString newVal);
-    static void set_filter_file_name(QString newVal);
-    static void set_filter_date(QString newVal);
-    static void set_filter_counter_last_report(QString newVal);
+    static void Set_filter_second_name(QString newVal);
+    static void Set_filter_first_name(QString newVal);
+    static void Set_filter_otchestvo(QString newVal);
+    static void Set_filter_file_name(QString newVal);
+    static void Set_filter_date(QString newVal);
+    static void Set_filter_counter_last_report(QString newVal);
 
 
 

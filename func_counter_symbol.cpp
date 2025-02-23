@@ -10,7 +10,7 @@ std::vector<int> operator +(const std::vector<int> &a, const std::vector<int> &b
     return sum;
 }
 
-void MainWindow::func_counter_symbol(QFile &object, const QString &id_in_map)
+void MainWindow::Func_counter_symbol(QFile &object, const QString &id_in_map)
 {
     QTextStream in(&object);
     QString symbol;

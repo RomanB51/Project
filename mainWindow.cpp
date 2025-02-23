@@ -92,17 +92,17 @@ QString MainWindow::filter_date = "";
 
 QString MainWindow::filter_counter_last_report = "";
 
-void MainWindow::set_filter_second_name(QString newVal){filter_second_name = newVal;}
+void MainWindow::Set_filter_second_name(QString newVal){filter_second_name = newVal;}
 
-void MainWindow::set_filter_first_name(QString newVal){filter_first_name = newVal;}
+void MainWindow::Set_filter_first_name(QString newVal){filter_first_name = newVal;}
 
-void MainWindow::set_filter_otchestvo(QString newVal){filter_otchestvo = newVal;}
+void MainWindow::Set_filter_otchestvo(QString newVal){filter_otchestvo = newVal;}
 
-void MainWindow::set_filter_file_name(QString newVal){filter_file_name = newVal;}
+void MainWindow::Set_filter_file_name(QString newVal){filter_file_name = newVal;}
 
-void MainWindow::set_filter_date(QString newVal){filter_date = newVal;}
+void MainWindow::Set_filter_date(QString newVal){filter_date = newVal;}
 
-void MainWindow::set_filter_counter_last_report(QString newVal){filter_counter_last_report = newVal;}
+void MainWindow::Set_filter_counter_last_report(QString newVal){filter_counter_last_report = newVal;}
 
 
 
@@ -142,7 +142,7 @@ void MainWindow::on_pushButton_ChooseFile_clicked()
 
         stroka_of_ReportWindow[file_name + time] = {sum_rus_letters, sum_eng_letters, count_numbers, count_signs, dop_info_about_text};
 
-        func_counter_symbol(file, file_name + time);
+        Func_counter_symbol(file, file_name + time);
 
         file.close();
     }
@@ -296,8 +296,8 @@ void MainWindow::on_pushButton_export_to_BD_clicked()
             "numbers, symbols, troetochie, letters, paragraph, proposal, words, number, glasn, soglasn) VALUES "
             "(" + id_staff.toStdString() + ", '" + info[0].toStdString() + "', '" + info[1].toStdString() + "', to_date('" +\
             info[2].toStdString() + "', 'DD.MM.YYYY'), '" + info[3].toStdString() + "', '" + info[4].toStdString() + "', '" + info[5].toStdString() +\
-            "', '" + info[6].toStdString() + "', '" + int_to_str(stroka_of_ReportWindow[key][0]) + "', '" + int_to_str(stroka_of_ReportWindow[key][1]) + \
-            "', '" + int_to_str(stroka_of_ReportWindow[key][2]) + "', '" + int_to_str(stroka_of_ReportWindow[key][3]) + "', " + \
+            "', '" + info[6].toStdString() + "', '" + Int_to_str(stroka_of_ReportWindow[key][0]) + "', '" + Int_to_str(stroka_of_ReportWindow[key][1]) + \
+            "', '" + Int_to_str(stroka_of_ReportWindow[key][2]) + "', '" + Int_to_str(stroka_of_ReportWindow[key][3]) + "', " + \
             std::to_string(stroka_of_ReportWindow[key][4][0]) + ", " + std::to_string(stroka_of_ReportWindow[key][4][1]) + ", " +\
             std::to_string(stroka_of_ReportWindow[key][4][2]) + ", " + std::to_string(stroka_of_ReportWindow[key][4][3]) + ", " + \
             std::to_string(stroka_of_ReportWindow[key][4][4]) + ", " + std::to_string(stroka_of_ReportWindow[key][4][5]) + ", " +\
@@ -399,8 +399,8 @@ void MainWindow::ShowDateFromDB()
                     std::vector<int> dop_info = {row[11].as<int>(), row[12].as<int>(), row[13].as<int>(), row[14].as<int>(), row[15].as<int>(),
                                                 row[16].as<int>(), row[17].as<int>(), row[18].as<int>()};
 
-                    stroka_of_ReportWindow[key] = {str_to_int(row[7].as<std::string>()), str_to_int(row[8].as<std::string>()),
-                                                    str_to_int(row[9].as<std::string>()), str_to_int(row[10].as<std::string>()),
+                    stroka_of_ReportWindow[key] = {Str_to_int(row[7].as<std::string>()), Str_to_int(row[8].as<std::string>()),
+                                                    Str_to_int(row[9].as<std::string>()), Str_to_int(row[10].as<std::string>()),
                                                     dop_info};
 
 
@@ -427,12 +427,12 @@ void MainWindow::ShowDateFromDB()
 }
 
 
-std::string MainWindow::int_to_str(std::vector<int> arr){
+std::string MainWindow::Int_to_str(std::vector<int> arr){
         return accumulate(std::next(std::begin(arr)), std::end(arr), std::to_string(arr[0]),\
                           [](std::string(a), int b){return a + "-" + std::to_string(b);});
 }
 
-std::vector<int> MainWindow::str_to_int(std::string str){
+std::vector<int> MainWindow::Str_to_int(std::string str){
     std::string num;
     std::vector<int> vec;
     vec.reserve(33);
