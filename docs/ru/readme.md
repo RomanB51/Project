@@ -29,7 +29,7 @@ Check_connection_DB().
 "Инженер" или "Ведущий инженер" и id сотрудника. Также происходит скрытие окна пароля и открытие главного окна. Сотрудник с должностью "Инженер" не может 
 корректировать полученные в результате обработки текстов данные, а "Ведущий инженер" имеет права для редактирования полученных отчетов.
 
-![image](https://github.com/user-attachments/assets/00ef4be7-da08-44bc-8e6f-1e4ce7eeb865)![image](https://github.com/user-attachments/assets/02dab5ca-50a7-40c6-ac31-a3cf45b531c9)
+![image](https://github.com/user-attachments/assets/00ef4be7-da08-44bc-8e6f-1e4ce7eeb865)     ![image](https://github.com/user-attachments/assets/02dab5ca-50a7-40c6-ac31-a3cf45b531c9)
 
 
 
