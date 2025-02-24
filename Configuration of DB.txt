@@ -1,5 +1,5 @@
 Name of DB = 'My_DB'
 Username in DB = 'roma'
 Password of user = '12345'
-Ip adress = '192.168.0.105'
+Ip adress = '192.168.88.15'
 Port = '2024'

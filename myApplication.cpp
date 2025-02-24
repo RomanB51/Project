@@ -92,19 +92,23 @@ bool MyApplication::Check_connection_DB()
 {
     QString information_about_connect = "dbname=" + data_about_DB[0] + " user=" + data_about_DB[1] + " password=" +\
                                         data_about_DB[2] + " hostaddr=" + data_about_DB[3] + " port=" + data_about_DB[4];
-    conn = new pqxx::connection(information_about_connect.toStdString());
-    if(conn->is_open()){
-        qDebug() << "Connected to PostgreSQL successfully.";
-        return 1;
-    }
-    else{
+    bool flag = 0;
+    try {
+        conn = new pqxx::connection(information_about_connect.toStdString());
+        if(conn->is_open()){
+            qDebug() << "Connected to PostgreSQL successfully.";
+            flag = 1;
+        }
+    } catch (const pqxx::broken_connection &) {
         qDebug() << "Failed to connect to PostgreSQL.";
         QMessageBox *msg = new QMessageBox();
         msg->setText("Не удалось подключиться к базе данных.\n\
-                     Убедитесь в правильности данных в конфигурационном файле.");
+Убедитесь в правильности данных в конфигурационном файле.");
         msg->setWindowTitle("Ошибка подключения");
         msg->exec();
-        return 0;
+        flag = 0;
     }
+    return flag;
+
 }
 
