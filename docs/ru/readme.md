@@ -39,6 +39,7 @@ Check_connection_DB().
 в БД, а зеленым те, которые уже ранее были загружены в нее. Внешний вид главного окна представлен ниже.
 
 ![image](https://github.com/user-attachments/assets/f1b5ca8c-2c38-4f18-b233-1b2fbd26e1d7)
+
 В нижней части главного окна приведены имя пользователя и ip-адрес БД.
 
 Реализованное окно имеет следующие кнопки:
@@ -61,6 +62,7 @@ Check_connection_DB().
 ![image](https://github.com/user-attachments/assets/c8521fa7-d1ab-40d7-9c66-4d8ff8afab65)
 ![image](https://github.com/user-attachments/assets/65190a01-cac0-4987-9c6e-84441fb5a97a)
 ![image](https://github.com/user-attachments/assets/74c48815-7856-42e3-aa2e-418aec27be47)
+
 В нижней части окна отчетов приведены имя пользователя, ip-адрес БД и название файла.
 
 <!--Окно фильтров-->
