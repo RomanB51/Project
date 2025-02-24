@@ -33,12 +33,13 @@ Check_connection_DB().
 ![image](https://github.com/user-attachments/assets/95f04a0c-19f9-4bf7-9c4d-91c3c6d39210)   
 ![image](https://github.com/user-attachments/assets/cf7a57dc-97c9-4115-920e-f60237c97757)
 
-
 <!--Главное окно-->
 ## Главное окно.
 Главное окно предназначено для отображения общей информации о сформированных ранее отчетах и отчетах загруженных из БД. Красным цветом помечены отчеты незагруженные
 в БД, а зеленым те, которые уже ранее были загружены в нее. Внешний вид главного окна представлен ниже.
+
 ![image](https://github.com/user-attachments/assets/f1b5ca8c-2c38-4f18-b233-1b2fbd26e1d7)
+В нижней части главного окна приведены имя пользователя и ip-адрес БД.
 
 Реализованное окно имеет следующие кнопки:
 1. "Выбрать файл" - кнопка для выбора текстового файла для обработки.
@@ -60,7 +61,7 @@ Check_connection_DB().
 ![image](https://github.com/user-attachments/assets/c8521fa7-d1ab-40d7-9c66-4d8ff8afab65)
 ![image](https://github.com/user-attachments/assets/65190a01-cac0-4987-9c6e-84441fb5a97a)
 ![image](https://github.com/user-attachments/assets/74c48815-7856-42e3-aa2e-418aec27be47)
-
+В нижней части окна отчетов приведены имя пользователя, ip-адрес БД и название файла.
 
 <!--Окно фильтров-->
 ## Окно фильтров.
