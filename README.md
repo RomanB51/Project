@@ -1,4 +1,5 @@
 # Text
+![Static Badge](https://img.shields.io/badge/RomanB51-Text-00FF00)
 ![Static Badge](https://img.shields.io/badge/C++-17-blue)
 ![Static Badge](https://img.shields.io/badge/CMake-3.16-red)
 ![Static Badge](https://img.shields.io/badge/QT-6-D8BFD8)
