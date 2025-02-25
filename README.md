@@ -1,4 +1,8 @@
 # Text
+![Static Badge](https://img.shields.io/badge/C++-17-blue)
+![Static Badge](https://img.shields.io/badge/CMake-3.16-red)
+![Static Badge](https://img.shields.io/badge/QT-6-D8BFD8)
+![Static Badge](https://img.shields.io/badge/PostgreSQL-16.6-CD853F)
 Программное обеспечение для обработки текстовых документов <!-- описание репозитория -->
 <!--Блок информации о репозитории в бейджах-->
 
