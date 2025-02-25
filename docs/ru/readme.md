@@ -1,8 +1,8 @@
 # Система обработки текста
 ![Static Badge](https://img.shields.io/badge/C++-17-blue)
 ![Static Badge](https://img.shields.io/badge/CMake-3.16-red)
-![Static Badge](https://img.shields.io/badge/QT-6-7FFF00)
-![Static Badge](https://img.shields.io/badge/PostgreSQL-8-0000FF)
+![Static Badge](https://img.shields.io/badge/QT-6-7FFFD4)
+![Static Badge](https://img.shields.io/badge/PostgreSQL-8-CD853F)
 
 Данная программа предназначена для обработки текстовых файлов, а именно поиска и подсчета разичных букв и символов. Также происходит подсчет гласных
 и согласных, количества предложений, абзацев, слов и.т.д. Результаты обработки текстов загружаются в локальную БД, помимо загрузки информации о тексте туда
